@@ -1,0 +1,35 @@
+2023-06-25 16:07:42	info	logger/init.go:99	初始化日志完成
+2023-06-25 16:07:42	info	logger/logger.go:52	初始化数据库连接完成
+2023-06-25 16:07:42	info	logger/logger.go:52	register swagger handler
+2023-06-25 16:07:42	info	logger/logger.go:52	路由注册成功
+2023-06-25 16:07:42	info	logger/logger.go:57	成功启动服务，地址 :8888...
+
+2023-06-25 16:41:34	info	logger/logger.go:52	开始关闭服务...
+2023-06-25 16:41:34	info	logger/logger.go:52	服务成功退出
+2023-06-25 16:41:40	info	logger/init.go:99	初始化日志完成
+2023-06-25 16:41:40	info	logger/logger.go:52	初始化数据库连接完成
+2023-06-25 16:41:40	info	logger/logger.go:52	register swagger handler
+2023-06-25 16:41:40	info	logger/logger.go:52	路由注册成功
+2023-06-25 16:41:40	info	logger/logger.go:57	成功启动服务，地址 :8888...
+
+2023-06-25 18:03:40	info	logger/logger.go:52	开始关闭服务...
+2023-06-25 18:03:40	info	logger/logger.go:52	服务成功退出
+2023-06-26 14:44:18	info	logger/init.go:98	初始化日志完成
+2023-06-26 14:44:18	info	logger/logger.go:52	register swagger handler
+2023-06-26 14:44:18	info	logger/logger.go:52	路由注册成功
+2023-06-26 14:44:18	info	logger/logger.go:57	成功启动服务，地址 :8888...
+
+2023-06-26 14:46:27	info	logger/logger.go:52	开始关闭服务...
+2023-06-26 14:46:27	info	logger/logger.go:52	服务成功退出
+2023-06-26 14:46:31	info	logger/init.go:98	初始化日志完成
+2023-06-26 14:46:31	info	logger/logger.go:52	register swagger handler
+2023-06-26 14:46:31	info	logger/logger.go:52	路由注册成功
+2023-06-26 14:46:31	info	logger/logger.go:57	成功启动服务，地址 :8100...
+
+2023-06-26 14:47:49	info	logger/logger.go:52	开始关闭服务...
+2023-06-26 14:47:49	info	logger/logger.go:52	服务成功退出
+2023-06-26 14:47:51	info	logger/init.go:98	初始化日志完成
+2023-06-26 14:47:51	info	logger/logger.go:52	register swagger handler
+2023-06-26 14:47:51	info	logger/logger.go:52	路由注册成功
+2023-06-26 14:47:51	info	logger/logger.go:57	成功启动服务，地址 :8100...
+
