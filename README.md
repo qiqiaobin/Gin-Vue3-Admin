@@ -18,7 +18,7 @@
 cd tadmin
 
 # 初始化依赖
-go mod init
+go mod tidy
 
 # 启动项目
 go run main.go
