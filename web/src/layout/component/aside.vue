@@ -5,7 +5,7 @@
 				<Vertical :menuList="state.menuList" />
 			</el-scrollbar>
             <div class="nav-option">
-                <SvgIcon class="nav-stick" :name="themeConfig.isCollapse ? 'ele-Expand' :'ele-Fold'" :size="16" @click="onThemeConfigChange"/>
+                <SvgIcon class="nav-stick" :name="themeConfig.isCollapse ? 'ele-Expand' :'ele-Fold'" :size="16" @click="onThemeConfigChange" />
             </div>
 		</el-aside>
 	</div>
@@ -57,18 +57,18 @@ const setCollapseStyle = computed(() => {
 			return [asideBrColor, 'layout-aside-mobile', 'layout-aside-mobile-close'];
 		}
 	} else {
-		//经典布局分割菜单只有一项子级时，菜单收起时宽度给 1px，防止切换动画消失
+        //经典布局分割菜单只有一项子级时，菜单收起时宽度给 1px，防止切换动画消失
         if (state.menuList.length <= 1)
         {
             return [asideBrColor, 'layout-aside-pc-1'];
-		} else {
-			// 其它布局给 64px，显示图标
-			if (isCollapse) {
+        } else{
+            // 其它布局给 64px，显示图标
+            if (isCollapse) {
                 return [asideBrColor, 'layout-aside-pc-64'];
             }else {
                 return [asideBrColor, 'layout-aside-pc-220'];
             }
-		}
+        }
 	}
 });
 // 关闭移动端蒙版
@@ -104,24 +104,24 @@ const initMenuFixed = (clientWidth: number) => {
 onBeforeMount(() => {
 	initMenuFixed(document.body.clientWidth);
 	setFilterRoutes();
-    // 开启经典布局分割菜单时，设置菜单数据
+	// 开启经典布局分割菜单时，设置菜单数据
 	mittBus.on('setSendClassicChildren', (res: MittMenu) => {
 		// 经典布局分割菜单只有一项子级时，收起左侧导航菜单
 		res.children.length <= 1 ? (themeConfig.value.isCollapse = true) : (themeConfig.value.isCollapse = false);
 		state.menuList = [];
 		state.menuList = res.children;
 	});
-    // 开启经典布局分割菜单时，重新处理菜单数据
+	// 开启经典布局分割菜单时，重新处理菜单数据
 	mittBus.on('getBreadcrumbIndexSetFilterRoutes', () => {
 		setFilterRoutes();
 	});
-    // 监听窗口大小改变时(适配移动端)
+	// 监听窗口大小改变时(适配移动端)
 	mittBus.on('layoutMobileResize', (res: LayoutMobileResize) => {
 		initMenuFixed(res.clientWidth);
 		closeLayoutAsideMobileMode();
 	});
 });
-// 监听 pinia 值的变化，动态赋值给菜单中
+// 监听用户权限切换，用于演示 `权限管理 -> 前端控制 -> 页面权限` 权限切换不生效
 watch(
 	() => routesList.value,
 	() => {

@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import pinia from '/@/stores/index';
 import { useUserInfo } from '/@/stores/userInfo';
-import { useDictData } from '/@/stores/dictData';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
 import { NextLoading } from '/@/utils/loading';
 import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
@@ -31,37 +31,27 @@ const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...lay
  */
 export async function initBackEndControlRoutes() {
 	// 界面 loading 动画开始执行
-	if (window.nextLoading === undefined) 
-		NextLoading.start();
-
+	if (window.nextLoading === undefined) NextLoading.start();
 	// 无 token 停止执行下一步
-	if (!cache.getToken()) {
-		return false;
-	}
-	// 用户信息
-	await useUserInfo().setUserInfos();	
-	
+	if (!cache.getToken()) return false;
+	// 触发初始化用户信息 pinia
+	// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
+	await useUserInfo().setUserInfos();
 	// 获取路由菜单数据
-	const res = await authApi.getMenu();
-	
+    const res = await authApi.getMenu();
 	// 无登录权限时，添加判断
-	if (res.data == undefined || res.data.length <= 0){
-		return false;
-	} 
-
+	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
+	if (res.data == undefined || res.data.length <= 0) return false;
 	// 存储接口原始路由（未处理component），根据需求选择使用
 	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
-
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
 	dynamicRoutes[0].children = await backEndComponent(res.data);
-
 	// 添加动态路由
 	await setAddRoute();
-
 	// 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
-	await setFilterMenuAndCacheTagsViewRoutes();
+	setFilterMenuAndCacheTagsViewRoutes();
 
-	return true;
+    return true;
 }
 
 /**

@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-breadcrumb-seting">
-		<el-drawer title="布局配置" direction="rtl" destroy-on-close size="260px">
+		<el-drawer title="布局配置" direction="rtl" destroy-on-close size="260px" @close="onDrawerClose">
 			<el-scrollbar class="layout-breadcrumb-seting-bar">
 				<!-- 界面设置 -->
 				<el-divider content-position="left">界面设置</el-divider>
@@ -38,14 +38,12 @@ import { nextTick, onUnmounted, onMounted, computed, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { Local } from '/@/utils/storage';
-import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { copyText } = commonFunction();
 const state = reactive({
 	isMobile: false,
 });
@@ -60,6 +58,10 @@ const onThemeConfigChange = () => {
 	setDispatchThemeConfig();
 };
 
+// 关闭弹窗时，初始化变量。变量用于处理 layoutScrollbarRef.value.update() 更新滚动条高度
+const onDrawerClose = () => {
+	setLocalThemeConfig();
+};
 // 触发 store 布局配置更新
 const setDispatchThemeConfig = () => {
 	setLocalThemeConfig();

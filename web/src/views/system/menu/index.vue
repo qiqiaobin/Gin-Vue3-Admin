@@ -1,21 +1,29 @@
 <template>
-	<div class="layout-padding">
-		<el-card shadow="hover" style="margin-top: 10px">
-			<div>
-				<el-button type="primary" @click="openEditDialog()" v-permission="['system_menu_add']" plain>
+	<div class="system-menu-container layout-pd">
+		<el-card shadow="hover">
+			<div class="system-menu-search mb15">
+				<!--el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10">
+					<el-icon>
+						<ele-Search />
+					</el-icon>
+					查询
+				</el-button-->
+				<el-button size="default" type="primary" class="ml10" @click="openEditDialog()" v-permission="['system_menu_add']" plain>
 					<el-icon>
 						<ele-Plus />
 					</el-icon>
-					新增
+					新增菜单
 				</el-button>
 			</div>
 			<el-table
 				:data="state.tableData.data"
 				v-loading="state.tableData.loading"
-				row-key="id"
+				style="width: 100%"
+				row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<el-table-column label="菜单名称"  show-overflow-tooltip>
+				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
 						<span class="ml10">{{ scope.row.menuName }}</span>
@@ -40,7 +48,7 @@
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<EditDialog ref="editFormRef" @refresh="handleQuery()" />
+		<EditDialog ref="editFormRef" @refresh="getTableData()" />
 	</div>
 </template>
 
@@ -51,7 +59,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import menuApi from '/@/api/system/menu';
 
 // 引入组件
-const EditDialog = defineAsyncComponent(() => import('./component/editDialog.vue'));
+const EditDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
 
 // 定义变量内容
 const editFormRef = ref();
@@ -62,14 +70,9 @@ const state = reactive({
 	},
 });
 
-// 页面加载时
-onMounted(() => {
-	handleQuery();
-});
-
 // 获取路由数据，真实请从接口获取
-const handleQuery = () => {
-	state.tableData.loading = true;
+const getTableData = () => {
+    state.tableData.loading = true;
 	menuApi.tree().then((res) => {
 		if (res.success) {
 			state.tableData.data = res.data;
@@ -77,18 +80,14 @@ const handleQuery = () => {
 		}
 	});
 };
-
 // 打开新增菜单弹窗
 const openEditDialog = (row?: any) => {
 	editFormRef.value.openDialog(row);
 };
-
 // 打开编辑菜单弹窗
 const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
 	editFormRef.value.openDialog(type, row);
 };
-
-// 删除
 const handleDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将永久删除菜单：${row.menuName}`, '提示', {
 		confirmButtonText: '确认',
@@ -98,11 +97,15 @@ const handleDel = (row: any) => {
 		.then(() => {
 			menuApi.delete({ id: row.id }).then((res) => {
 				if (res.success) {
-					handleQuery();
+					getTableData();
 					ElMessage.success('删除成功');
 				}
 			});
 		})
 		.catch(() => {});
 };
+// 页面加载时
+onMounted(() => {
+	getTableData();
+});
 </script>

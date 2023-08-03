@@ -1,53 +1,55 @@
 <template>
-	<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="750px" @close="closeDialog">
-		<el-form ref="dataFormRef" :model="state.dataForm" :rules="state.rules" size="default" label-width="90px">
-			<el-row :gutter="35">
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="角色名称" prop="roleName">
-						<el-input v-model="state.dataForm.roleName" placeholder="请输入角色名称" clearable></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="角色代码" prop="roleCode">
+	<div class="system-role-dialog-container">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" @close="closeDialog">
+			<el-form ref="dataFormRef" :model="state.dataForm" size="default" label-width="90px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="角色名称">
+							<el-input v-model="state.dataForm.roleName" placeholder="请输入角色名称" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="角色代码" prop="roleCode">
 						<el-input v-model="state.dataForm.roleCode" placeholder="请输入角色代码" clearable></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="排序" prop="sort">
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="排序" prop="sort">
 						<el-input-number v-model="state.dataForm.sort" :min="0" :max="999" controls-position="right"
 							placeholder="请输入排序" class="w100" />
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="角色状态" prop="status">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="角色状态" prop="status">
 						<el-switch v-model="state.dataForm.status" :active-value="0" :inactive-value="1" inline-prompt
 							active-text="启用" inactive-text="禁用"></el-switch>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-					<el-form-item label="角色描述" prop="remark">
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="角色描述" prop="remark">
 						<el-input v-model="state.dataForm.remark" type="textarea" placeholder="请输入角色描述"
 							maxlength="150"></el-input>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-					<el-form-item label="菜单权限">
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="菜单权限">
 						<el-tree ref="roleMenuRef" :data="state.menuData" :props="state.menuProps" class="menu-data-tree"
 							node-key="id" show-checkbox />
 					</el-form-item>
-				</el-col>
-			</el-row>
-		</el-form>
-		<template #footer>
-			<span class="dialog-footer">
-				<el-button @click="closeDialog" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
-			</span>
-		</template>
-	</el-dialog>
+					</el-col>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="closeDialog" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="systemRoleDialog">
 import { reactive, ref, nextTick } from 'vue';
 import { ElMessage, ElTree } from 'element-plus';
 import roleApi from '/@/api/system/role';
@@ -101,7 +103,6 @@ const openDialog = (row: any) => {
 
 	state.dialog.isShowDialog = true;
 };
-
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
@@ -143,12 +144,11 @@ const onSubmit = () => {
 				}
 			});
 		}
-	});
+    });
 };
-
 // 获取菜单结构数据
 const getMenuData = () => {
-	menuApi.list().then((res) => {
+    menuApi.list().then((res) => {
 		if (res.success) {
 			state.menuData = buildMenuTree(res.data, 0);
 		}
@@ -194,11 +194,12 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.menu-data-tree {
-	width: 100%;
-	border: 1px solid var(--el-border-color);
-	border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-	padding: 5px;
+.system-role-dialog-container {
+	.menu-data-tree {
+		width: 100%;
+		border: 1px solid var(--el-border-color);
+		border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+		padding: 5px;
+	}
 }
 </style>
-

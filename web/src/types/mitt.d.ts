@@ -9,11 +9,11 @@ declare type MittType<T = any> = {
 	setSendClassicChildren: T;
 	getBreadcrumbIndexSetFilterRoutes?: string;
 	layoutMobileResize: T;
+
 };
 
 // mitt 参数类型定义
 declare type LayoutMobileResize = {
-	layout: string;
 	clientWidth: number;
 };
 

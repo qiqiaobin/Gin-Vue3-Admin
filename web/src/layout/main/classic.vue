@@ -13,8 +13,6 @@
 <script setup lang="ts" name="layoutClassic">
 import { defineAsyncComponent, ref, watch, nextTick, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useThemeConfig } from '/@/stores/themeConfig';
 
 // 引入组件
 const LayoutAside = defineAsyncComponent(() => import('/@/layout/component/aside.vue'));
@@ -24,8 +22,6 @@ const LayoutMain = defineAsyncComponent(() => import('/@/layout/component/main.v
 // 定义变量内容
 const layoutMainRef = ref<InstanceType<typeof LayoutMain>>();
 const route = useRoute();
-const storesThemeConfig = useThemeConfig();
-const { themeConfig } = storeToRefs(storesThemeConfig);
 
 // 重置滚动条高度，更新子级 scrollbar
 const updateScrollbar = () => {
@@ -37,7 +33,7 @@ const initScrollBarHeight = () => {
 		setTimeout(() => {
 			updateScrollbar();
 			// '!' not null 断言操作符，不执行运行时检查
-			layoutMainRef.value!.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
+			if (layoutMainRef.value) layoutMainRef.value!.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
 		}, 500);
 	});
 };
@@ -50,16 +46,6 @@ watch(
 	() => route.path,
 	() => {
 		initScrollBarHeight();
-	}
-);
-// 监听 themeConfig 配置文件的变化，更新菜单 el-scrollbar 的高度
-watch(
-	themeConfig,
-	() => {
-		updateScrollbar();
-	},
-	{
-		deep: true,
 	}
 );
 </script>

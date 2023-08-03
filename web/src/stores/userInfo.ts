@@ -4,6 +4,7 @@ import cache from '/@/utils/cache';
 
 /**
  * 用户信息
+ * @methods setUserInfos 设置用户信息
  */
 export const useUserInfo = defineStore('userInfo', {
 	state: (): any => ({
@@ -41,8 +42,8 @@ export const useUserInfo = defineStore('userInfo', {
 				this.userInfos = res.data;
 			}
 
-		},		
-		// 权限验证
+		},
+        // 权限验证
 		hasPermission(permissions: string[]) {
 			let hasPermissions = false;
 			if (permissions.length > 0) {
@@ -55,6 +56,6 @@ export const useUserInfo = defineStore('userInfo', {
 				})
 			}
 			return hasPermissions;
-		}
+		}	
 	},
 });

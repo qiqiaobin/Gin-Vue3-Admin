@@ -1,37 +1,34 @@
 <template>
-	<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" @close="closeDialog">
-		<el-form ref="dataFormRef" :model="state.dataForm" :rules="state.rules" size="default" label-width="80px">
-			<el-row :gutter="35">
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-					<el-form-item label="上级菜单" prop="parentId">
-						<!-- <el-cascader :options="state.menuOptions" v-model="state.dataForm.parentId"
-							:props="{ checkStrictly: true, emitPath: false }" class="w100" clearable /> -->
-						<el-tree-select v-model="state.dataForm.parentId" :data="state.menuOptions"  class="w100" :check-strictly="true"/>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="菜单类型" prop="menuType">
-						<el-radio-group v-model="state.dataForm.menuType">
-							<!-- <el-radio :label="0">目录</el-radio>
+	<div class="system-menu-dialog-container">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" @close="closeDialog">
+			<el-form ref="dataFormRef" :model="state.dataForm" size="default" label-width="80px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="上级菜单" prop="parentId">
+							<el-tree-select v-model="state.dataForm.parentId" :data="state.menuOptions"  class="w100" :check-strictly="true"/>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="菜单类型">
+							<el-radio-group v-model="state.dataForm.menuType">
+							<el-radio :label="0">目录</el-radio>
 							<el-radio :label="1">菜单</el-radio>
-							<el-radio :label="2">按钮</el-radio> -->
-							<el-radio v-for="item in state.menuTypeOption" :key="item.dictItemValue"
-								:label="item.dictItemValue">{{ item.dictItemName }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="菜单状态" prop="status">
-						<el-switch v-model="state.dataForm.status" :active-value="0" :inactive-value="1" inline-prompt
+							<el-radio :label="2">按钮</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="菜单状态">
+							<el-switch v-model="state.dataForm.status" :active-value="0" :inactive-value="1" inline-prompt
 							active-text="启用" inactive-text="禁用"></el-switch>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 					<el-form-item label="菜单名称" prop="menuName">
 						<el-input v-model="state.dataForm.menuName" placeholder="请输入菜单名称" clearable></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 					<el-form-item label="菜单排序" prop="sort">
 						<el-input-number v-model="state.dataForm.sort" controls-position="right" placeholder="请输入排序"
 							class="w100" />
@@ -49,8 +46,8 @@
 						</el-form-item>
 					</el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-						<el-form-item label="重定向地址" prop="redirect">
-							<el-input v-model="state.dataForm.redirect" placeholder="请输入重定向地址" clearable></el-input>
+						<el-form-item label="重定向路由" prop="redirect">
+							<el-input v-model="state.dataForm.path" placeholder="请输入重定向地址" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<template v-if="state.dataForm.menuType === 1">
@@ -83,22 +80,6 @@
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
-						<!--el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-							<el-form-item label="页面缓存" prop="isCache">
-								<el-radio-group v-model="state.dataForm.isCache">
-									<el-radio :label="true">缓存</el-radio>
-									<el-radio :label="false">不缓存</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-							<el-form-item label="是否固定" prop="isAffix">
-								<el-radio-group v-model="state.dataForm.isAffix">
-									<el-radio :label="true">固定</el-radio>
-									<el-radio :label="false">不固定</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col-->
 					</template>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="是否隐藏" prop="isHide">
@@ -108,8 +89,8 @@
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
-				</template>
-				<template v-if="state.dataForm.menuType === 2">
+					</template>
+                    <template v-if="state.dataForm.menuType === 2">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
 						<el-form-item label="权限标识" prop="permission">
 							<el-input v-model="state.dataForm.permission" placeholder="请输入权限标识" clearable></el-input>
@@ -126,21 +107,21 @@
 						</el-form-item>
 					</el-col>
 				</template>
-			</el-row>
-		</el-form>
-		<template #footer>
-			<span class="dialog-footer">
-				<el-button @click="closeDialog" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
-			</span>
-		</template>
-	</el-dialog>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="closeDialog" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
-<script setup lang="ts">
-import { defineAsyncComponent, reactive, ref, nextTick } from 'vue';
+<script setup lang="ts" name="systemMenuDialog">
+import { defineAsyncComponent, reactive, onMounted, ref, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useDictData } from '/@/stores/dictData';
 import menuApi from '/@/api/system/menu';
 
 // 定义子组件向父组件传值/事件
@@ -151,18 +132,20 @@ const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelect
 
 // 定义变量内容
 const dataFormRef = ref();
-
 const state = reactive({
+	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	dataForm: {
 		parentId: 0, // 上级菜单
 		menuName: '', // 菜单名称
 		menuType: 0, // 菜单类型（0目录，1菜单，2按钮）
 		path: '', // 路由地址
-        redirect: '', // 重定向地址
+        redirect: '', // 重定向路由地址
 		link: '', // 外部地址
 		isLink: false, // 是否外链，
 		isIframe: false, // 是否内嵌
 		isHide: false, // 是否隐藏
+		isCache: true, // 是否缓存
+		isAffix: true, // 是否固定
 		component: '', // 组件路径
 		icon: '', // 菜单图标
 		permission: '', // 按钮权限
@@ -184,7 +167,7 @@ const state = reactive({
 		isEdit: false,
 		title: '',
 	},
-	menuTypeOption: Array()
+    menuTypeOption: Array()
 });
 
 // 获取路由
@@ -223,7 +206,6 @@ const buildMenuOptions = (list: any, parentId: number): any => {
 // 打开弹窗
 const openDialog = (row: any) => {
 	getMenuData();
-	state.menuTypeOption = useDictData().getDictItem('menu_type');
 	if (row) {
 		state.dialog.isEdit = true;
 		state.dialog.title = '编辑角色';
@@ -239,14 +221,12 @@ const openDialog = (row: any) => {
 	}
 	state.dialog.isShowDialog = true;
 };
-
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
 	// 重置表单
 	dataFormRef.value.resetFields();
 };
-
 // 是否内嵌下拉改变
 const onSelectIframeChange = () => {
 	if (state.dataForm.isIframe) state.dataForm.isLink = true;
@@ -281,6 +261,10 @@ const onSubmit = () => {
 		}
 	});
 };
+// 页面加载时
+onMounted(() => {
+	state.menuOptions = getMenuData();
+});
 
 // 暴露变量
 defineExpose({

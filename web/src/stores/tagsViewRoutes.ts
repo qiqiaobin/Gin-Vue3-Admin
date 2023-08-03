@@ -11,6 +11,6 @@ export const useTagsViewRoutes = defineStore('tagsViewRoutes', {
 	actions: {
 		async setTagsViewRoutes(data: Array<string>) {
 			this.tagsViewRoutes = data;
-		}
+		},
 	},
 });

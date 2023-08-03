@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, onMounted } from 'vue';
+import { reactive, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
@@ -160,7 +160,7 @@ const signInSuccess = () => {
 			color: #909399;
 		}
 	}
-	.login-content-captcha {
+	.login-content-code {
 		width: 100%;
 		padding: 0;
 		font-weight: bold;

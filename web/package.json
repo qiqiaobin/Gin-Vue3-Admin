@@ -1,8 +1,8 @@
 {
 	"name": "Gin-Vue3-Admin",
 	"version": "2.4.33",
-	"description": "基于Go+Vue开发的权限管理系统",
-	"author": "xiaofeichuan",
+	"description": "vue3 vite next admin template",
+	"author": "Qiqb",
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite --force",
@@ -11,25 +11,24 @@
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.1.0",
-		"@highlightjs/vue-plugin": "^2.1.0",
 		"axios": "^1.3.5",
 		"echarts": "^5.4.2",
 		"element-plus": "^2.3.3",
-		"highlight.js": "^11.8.0",
 		"js-cookie": "^3.0.1",
 		"mitt": "^3.0.0",
 		"nprogress": "^0.2.0",
 		"pinia": "^2.0.34",
 		"qrcodejs2-fixes": "^0.0.2",
-		"qs": "^6.11.1",
 		"screenfull": "^6.0.2",
 		"sortablejs": "^1.15.0",
 		"vue": "^3.2.47",
 		"vue-clipboard3": "^2.0.0",
-		"vue-json-pretty": "^2.2.4",
+		"vue-demi": "^0.13.11",
+		"qs": "^6.11.1",
 		"vue-router": "^4.1.6"
 	},
 	"devDependencies": {
+		"@types/node": "^18.15.11",
 		"@types/nprogress": "^0.2.0",
 		"@typescript-eslint/eslint-plugin": "^5.58.0",
 		"@typescript-eslint/parser": "^5.58.0",
@@ -41,7 +40,9 @@
 		"sass": "^1.61.0",
 		"typescript": "^5.0.4",
 		"vite": "^4.2.1",
-		"vite-plugin-vue-setup-extend": "^0.4.0",
+		"vite-plugin-cdn-import": "^0.3.5",
+		"vite-plugin-compression": "^0.5.1",
+		"vite-plugin-vue-setup-extend-plus": "^0.1.0",
 		"vue-eslint-parser": "^9.1.1"
 	},
 	"browserslist": [
@@ -59,9 +60,11 @@
 	"keywords": [
 		"vue",
 		"vue3",
+		"vuejs/vue-next",
+		"vuejs/vue-next-template",
 		"element-ui",
 		"element-plus",
-		"Gin-Vue3-Admin",
+		"vue-next-admin",
 		"next-admin"
 	],
 	"repository": {

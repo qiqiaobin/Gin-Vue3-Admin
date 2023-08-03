@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-logo" @click="onThemeConfigChange">
-		<img :src="logoMini" class="layout-logo-medium-img" width="30"/>
+		<img :src="logoMini"  class="layout-logo-medium-img" />
 		<span>
             {{ themeConfig.globalTitle }}
         </span>

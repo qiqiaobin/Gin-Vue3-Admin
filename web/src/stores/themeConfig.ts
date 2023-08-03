@@ -18,12 +18,18 @@ export const useThemeConfig = defineStore('themeConfig', {
 			animation: 'slide-right',
 
 			/**
+			 * 后端控制路由
+			 */
+			// 是否开启后端控制路由
+			isRequestRoutes: true,
+
+			/**
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题）
-			globalTitle: 'Gin-Vue3-Admin',
+			globalTitle: 'vue3-admin',
 			// 网站副标题（登录页顶部文字）
-			globalViceTitle: 'Gin-Vue3-Admin',
+			globalViceTitle: 'vue3-admin',
 			// 网站副标题（登录页顶部文字）
 			globalViceTitleMsg: '专注、免费、开源、维护、解疑',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn

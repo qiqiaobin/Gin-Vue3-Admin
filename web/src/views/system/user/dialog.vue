@@ -1,83 +1,80 @@
 <template>
-	<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="750px" @close="closeDialog">
-		<el-form ref="dataFormRef" :model="state.dataForm" :rules="state.rules" label-width="90px">
-			<el-row :gutter="30">
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="账号名称" prop="userName">
-						<el-input v-model="state.dataForm.userName" placeholder="请输入账号名称" :disabled="state.dialog.isEdit"
+	<div class="system-user-dialog-container">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" @close="closeDialog">
+			<el-form ref="dataFormRef" :model="state.dataForm" :rules="state.rules" size="default" label-width="90px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="账户名称" prop="userName">
+							<el-input v-model="state.dataForm.userName" placeholder="请输入账号名称" :disabled="state.dialog.isEdit"
 							clearable></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="用户昵称" prop="nickName">
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="用户昵称" prop="nickName">
 						<el-input v-model="state.dataForm.nickName" placeholder="请输入用户昵称" clearable></el-input>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="手机号码" prop="phone">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="手机号码" prop="phone">
 						<el-input v-model="state.dataForm.phone" placeholder="请输入手机号" clearable></el-input>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="邮箱" prop="email">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="邮箱" prop="email">
 						<el-input v-model="state.dataForm.email" placeholder="请输入邮箱" clearable></el-input>
 					</el-form-item>
-				</el-col>
-
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="性别" prop="gender">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="性别" prop="gender">
 						<el-select v-model="state.dataForm.gender" placeholder="请选择性别" clearable class="w100">
-							<!-- <el-option label="未知" :value="0"></el-option>
+							<el-option label="未知" :value="0"></el-option>
 							<el-option label="男" :value="1"></el-option>
-							<el-option label="女" :value="2"></el-option> -->
-							<el-option v-for="item in useDictData().getDictItem('user_gender')" :key="item.dictItemValue"
-								:label="item.dictItemName" :value="item.dictItemValue">
-							</el-option>
+							<el-option label="女" :value="2"></el-option>
 						</el-select>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="用户状态" prop="status">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="用户状态" prop="status">
 						<el-switch v-model="state.dataForm.status" :active-value="0" :inactive-value="1" inline-prompt
 							active-text="启用" inactive-text="禁用"></el-switch>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" v-if="!state.dialog.isEdit">
-					<el-form-item label="账户密码" prop="password">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="账户密码" prop="password">
 						<el-input v-model="state.dataForm.password" placeholder="请输入账户密码" type="password"
 							show-password></el-input>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-					<el-form-item label="用户角色" prop="roleIds">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="用户角色" prop="roleIds">
 						<el-select v-model="state.dataForm.roleIds" multiple collapse-tags collapse-tags-tooltip
 							:max-collapse-tags="2" placeholder="请选择角色" style="width: 100%">
 							<el-option v-for="item in state.roleOption" :key="item.id" :label="item.roleName"
 								:value="item.id" />
 						</el-select>
 					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-					<el-form-item label="用户备注" prop="remark">
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<el-form-item label="用户备注" prop="remark">
 						<el-input v-model="state.dataForm.remark" type="textarea" placeholder="请输入用户描述"
 							maxlength="150"></el-input>
 					</el-form-item>
-				</el-col>
-			</el-row>
-		</el-form>
-		<template #footer>
-			<span class="dialog-footer">
-				<el-button @click="closeDialog" size="default">取 消</el-button>
-				<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
-			</span>
-		</template>
-	</el-dialog>
+					</el-col>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="closeDialog" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="systemUserDialog">
 import { reactive, ref, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useDictData } from '/@/stores/dictData';
 import userApi from '/@/api/system/user';
 import roleApi from '/@/api/system/role';
 
@@ -112,7 +109,7 @@ const state = reactive({
 		isEdit: false,
 		title: '',
 	},
-	roleOption: [] as any,
+    roleOption: [] as any,
 });
 
 // 打开弹窗
@@ -131,11 +128,10 @@ const openDialog = (row: any) => {
 
 	state.dialog.isShowDialog = true;
 };
-
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
-	// 重置表单
+    // 重置表单
 	dataFormRef.value.resetFields();
 };
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-navbars-breadcrumb-index">
 		<Logo />
-		<Horizontal :menuList="state.menuList"/>
+		<Horizontal :menuList="state.menuList" />
 		<User />
 	</div>
 </template>
@@ -28,9 +28,10 @@ const state = reactive({
 
 // 设置/过滤路由（非静态路由/是否显示在菜单中）
 const setFilterRoutes = () => {
-    state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
+	state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
 	const resData = setSendClassicChildren(route.path);
 	mittBus.emit('setSendClassicChildren', resData);
+
 };
 // 设置了分割菜单时，删除底下 children
 const delClassicChildren = <T extends ChilType>(arr: T[]): T[] => {

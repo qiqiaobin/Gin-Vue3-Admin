@@ -22,6 +22,7 @@ declare interface ThemeConfigState {
 	themeConfig: {
 		isCollapse: boolean;
 		animation: string;
+		isRequestRoutes: boolean;
 		globalTitle: string;
 		globalViceTitle: string;
 		globalViceTitleMsg: string;

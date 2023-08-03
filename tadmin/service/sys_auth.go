@@ -108,7 +108,7 @@ func GetUserPermission(userId int64) (permissions []dto.UserPermissionVo) {
 
 		orm.DB.Model(&model.SysMenu{}).
 			Select("permission", "request_method").
-			Where("id IN ? AND menu_type = 1 AND status = 0 ", menuIds).
+			Where("id IN ? AND menu_type = 2 AND status = 0 ", menuIds).
 			Scan(&permissions)
 
 		//设置缓存

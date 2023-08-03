@@ -28,7 +28,6 @@ const layoutMainScrollbarRef = ref();
 const setBacktopClass = computed(() => {
 	return `.layout-backtop-header-fixed .el-scrollbar__wrap`;
 });
-
 // 页面加载前
 onMounted(() => {
 	NextLoading.done(600);

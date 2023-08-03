@@ -1,7 +1,7 @@
 <template>
 	<el-config-provider :size="getGlobalComponentSize" :locale="zhCn">
-		<router-view />
-		<Setings ref="setingsRef" />
+		<router-view  />
+        <Setings ref="setingsRef" />
 	</el-config-provider>
 </template>
 
@@ -15,7 +15,7 @@ import { Local } from '/@/utils/storage';
 import setIntroduction from '/@/utils/setIconfont';
 
 // 引入组件
-const Setings = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/setings.vue'));
+const Setings = defineAsyncComponent(() => import('/@/layout/navBars/topBar/setings.vue'));
 
 // 定义变量内容
 const setingsRef = ref();
@@ -35,7 +35,7 @@ onBeforeMount(() => {
 });
 // 页面加载时
 onMounted(() => {
-	nextTick(() => {
+    nextTick(() => {
         // 获取缓存中的布局配置
 		if (Local.get('themeConfig')) {
 			storesThemeConfig.setThemeConfig({ themeConfig: Local.get('themeConfig') });
