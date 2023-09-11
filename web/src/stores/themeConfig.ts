@@ -21,7 +21,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 后端控制路由
 			 */
 			// 是否开启后端控制路由
-			isRequestRoutes: true,
+			//isRequestRoutes: true,
 
 			/**
 			 * 全局网站标题 / 副标题

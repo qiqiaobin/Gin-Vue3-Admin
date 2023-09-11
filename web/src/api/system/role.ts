@@ -9,11 +9,11 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	query(parameter:any) {
+	query() {
 		return request({
 			url: '/system/role/query',
 			method: 'get',
-			params: parameter
+			//params: parameter
 		});
 	}
 	/**
@@ -21,7 +21,7 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 add(parameter:any) {
+	add(parameter:any) {
 		return request({
 			url: '/system/role/add',
 			method: 'post',
@@ -33,11 +33,11 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 update(parameter:any) {
+    update(id:number, data:any) {
 		return request({
-			url: '/system/role/update',
-			method: 'post',
-			data: parameter
+			url: `/system/role/${id}/update`,
+			method: 'put',
+			data: data,
 		});
 	}
 	/**
@@ -45,11 +45,10 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 delete(parameter:any) {
+    roledel(id:number) {
 		return request({
-			url: '/system/role/delete',
-			method: 'post',
-			data: parameter
+			url: `/system/role/${id}`,
+			method: 'delete',
 		});
 	}
 	/**
@@ -57,18 +56,18 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 detail(parameter:any) {
+    getdetail(id:number) {
 		return request({
-			url: '/system/role/detail',
+			url: `/system/role/${id}`,
 			method: 'get',
-			params: parameter
+			//params: parameter
 		});
 	}
 	/**
 	 * 角色列表
 	 * @returns 
 	 */
-	 list() {
+	list() {
 		return request({
 			url: '/system/role/list',
 			method: 'get',
@@ -83,6 +82,17 @@ import request from '/@/utils/request';
 			url: '/system/role/authMenu',
 			method: 'get',
 			params: parameter
+		});
+	}
+    /**
+	 * 保存角色菜单权限
+	 * @returns 
+	 */
+    saveRoleMenu(id:number, data:any) {
+		return request({
+			url: `/system/role/${id}/update`,
+			method: 'put',
+			data: data,
 		});
 	}
 }

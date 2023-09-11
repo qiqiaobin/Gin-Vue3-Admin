@@ -1,6 +1,6 @@
 # jwt configuration
 jwt:
-  signing-key: Qiqb
+  SigningKey: RcWJhezAYXjzVzZRmaX8B8uy2U3Hgg2p
   expires_time: 10
   buffer_time: 43200
   issuer: 'gin-vue3-admin'
@@ -15,7 +15,7 @@ logger:
   max_backups: 5  # 备份数
   max_age: 2 # 存放时间, 天
   compress: false # 是否压缩
-  show_line: true # 是否显示调用行
+  ShowLine: true # 是否显示调用行
 
 # system configuration
 system:
@@ -29,15 +29,14 @@ mysql:
   dbType: 'mysql'
   host: '10.77.64.33'
   port: 3306
-  config: 'charset=utf8&parseTime=true'
-  db-name: 'gin-vue3-admin'
+  debug: true
+  DbName: 'gin-vue3-admin'
   username: 'root'
   password: 'Gdkalrknb3oB4'
-  max_idle_conns: 10
-  max_open_conns: 100
-  max_life_time: 60
-  log-mode: false
-  log-zap: false
+  MaxIdleConns: 10
+  MaxOpenConns: 100
+  MaxLifetime: 60
+  TablePrefix: ''
 
 # redis configuration
 redis:

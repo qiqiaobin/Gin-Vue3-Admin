@@ -32,8 +32,8 @@
 			</el-col>
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
-				<el-button class="login-content-captcha" v-waves>
-					<img :src="state.captchaBase64" @click="getCaptchaImage" style="width: 100%; height: 100%" title="看不清？点击更换" />
+				<el-button class="login-content-code" v-waves>
+					<img :src="state.captchaBase64"  class="login-content-code-img" @click="getCaptchaImage" style="width: 100%; height: 100%" title="看不清？点击更换" />
 				</el-button>
 			</el-col>
 		</el-form-item>
@@ -82,15 +82,13 @@ onMounted(() => {
 // 获取验证码图片
 const getCaptchaImage = () => {
 	authApi.getCaptcha().then((res: any) => {
-		if (res.success) {
-			const data = res.data;
-			state.loginForm.captchaId = data.captchaId;
-			const img = data.captchaBase64;
-			if (img.indexOf('data:image') > -1) {
-				state.captchaBase64 = img;
-			} else {
-				state.captchaBase64 = 'data:image/png;base64,' + img;
-			}
+		const data = res.data;
+		state.loginForm.captchaId = data.captchaid;
+		const img = data.imgdata;
+		if (img.indexOf('data:image') > -1) {
+			state.captchaBase64 = img;
+		} else {
+			state.captchaBase64 = 'data:image/png;base64,' + img;
 		}
 	});
 };
@@ -98,7 +96,7 @@ const getCaptchaImage = () => {
 // 登录
 const onSignIn = async () => {
 	var res = await userInfoStore.loginAction(state.loginForm);
-	if (res.success) {
+	if (res.data) {
 		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
 		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
 		const isSuccess = await initBackEndControlRoutes();
@@ -160,17 +158,40 @@ const signInSuccess = () => {
 			color: #909399;
 		}
 	}
-	.login-content-code {
-		width: 100%;
-		padding: 0;
-		font-weight: bold;
-		letter-spacing: 5px;
-	}
 	.login-content-submit {
 		width: 100%;
 		letter-spacing: 2px;
 		font-weight: 300;
 		margin-top: 15px;
 	}
+    .login-content-code {
+        width: 100%;
+		padding: 0;
+		font-weight: bold;
+		letter-spacing: 5px;
+
+        .login-content-code-img {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            background-color: #ffffff;
+            border: 1px solid rgb(220, 223, 230);
+            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-indent: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all ease 0.2s;
+            border-radius: 4px;
+            user-select: none;
+
+            &:hover {
+                border-color: #c0c4cc;
+                transition: all ease 0.2s;
+            }
+        }
+    }
 }
 </style>

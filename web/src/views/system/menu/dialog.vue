@@ -173,15 +173,13 @@ const state = reactive({
 // 获取路由
 const getMenuData = () => {
 	menuApi.list().then((res) => {
-		if (res.success) {
-			state.menuOptions = [
-				{
-					value: 0,
-					label: '顶级',
-					children: buildMenuOptions(res.data, 0),
-				},
-			];
-		}
+		state.menuOptions = [
+			{
+				value: 0,
+				label: '顶级',
+				children: buildMenuOptions(res.data, 0),
+			},
+		];
 	});
 };
 
@@ -242,21 +240,17 @@ const onSubmit = () => {
 
 		if (state.dialog.isEdit) {
 			//更新
-			menuApi.update(state.dataForm).then((res) => {
-				if (res.success) {
-					ElMessage.success('更新成功');
-					emit('refresh'); //刷新页面
-					closeDialog();
-				}
+			menuApi.update(state.dataForm).then(() => {
+				ElMessage.success('更新成功');
+				emit('refresh'); //刷新页面
+				closeDialog();
 			});
 		} else {
 			//添加
-			menuApi.add(state.dataForm).then((res) => {
-				if (res.success) {
-					ElMessage.success('添加成功');
-					emit('refresh'); //刷新页面
-					closeDialog();
-				}
+			menuApi.add(state.dataForm).then(() => {
+				ElMessage.success('添加成功');
+				emit('refresh'); //刷新页面
+				closeDialog();
 			});
 		}
 	});

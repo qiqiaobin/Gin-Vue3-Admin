@@ -13,7 +13,7 @@ class UserApi {
 		return request({
 			url: '/system/user/query',
 			method: 'get',
-			params: parameter
+			params: parameter,
 		});
 	}
 	/**
@@ -25,7 +25,7 @@ class UserApi {
 		return request({
 			url: '/system/user/add',
 			method: 'post',
-			data: parameter
+			data: parameter,
 		});
 	}
 	/**
@@ -33,11 +33,11 @@ class UserApi {
 	 * @param parameter 
 	 * @returns 
 	 */
-	update(parameter: any) {
+    userupdate(id:number, data:any) {
 		return request({
-			url: '/system/user/update',
-			method: 'post',
-			data: parameter
+			url: `/system/user/${id}/update`,
+			method: 'put',
+			data: data,
 		});
 	}
 	/**
@@ -45,11 +45,10 @@ class UserApi {
 	 * @param parameter 
 	 * @returns 
 	 */
-	delete(parameter: any) {
+    userdel(id:number) {
 		return request({
-			url: '/system/user/delete',
-			method: 'post',
-			data: parameter
+			url: `/system/user/${id}`,
+			method: 'delete',
 		});
 	}
 	/**
@@ -57,11 +56,11 @@ class UserApi {
 	 * @param parameter 
 	 * @returns 
 	 */
-	detail(parameter: any) {
+    getdetail(id:number) {
 		return request({
-			url: '/system/user/detail',
+			url: `/system/user/${id}`,
 			method: 'get',
-			params: parameter
+			//params: parameter
 		});
 	}
 	/**
@@ -74,30 +73,19 @@ class UserApi {
 			method: 'get',
 		});
 	}
-	/**
-	 * 设置用户状态
-	 * @param parameter 
-	 * @returns 
-	 */
-	setStatus(parameter: any) {
-		return request({
-			url: '/system/user/setStatus',
-			method: 'post',
-			data: parameter
-		});
-	}
-	/**
+    /**
 	 * 重置密码
 	 * @param parameter 
 	 * @returns 
 	 */
-	resetPwd(parameter: any) {
-		return request({
-			url: '/system/user/resetPwd',
-			method: 'post',
-			data: parameter
-		});
-	}
+    RsetPwd(id:number, data:any) {
+        return request({
+            //url: '/system/user/'+uid+ '/password',
+            url: `/system/user/${id}/password`, 
+            method: 'put',
+            data: data,
+        });
+    }
 }
 
 export default new UserApi()

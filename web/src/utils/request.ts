@@ -38,11 +38,12 @@ service.interceptors.response.use(
 		const res = response.data;
 		if (res.code === 200) {
 			//请求成功
-			if (!res.success) {
+			//if (!res.success) {
 				//业务处理错误
-				ElMessage.error(res.message);
-			}
+				//ElMessage.error(res.message);
+			//}
 			return Promise.resolve(res);
+            //return res.data;
 		} else if (res.code === 401) {
 			// token错误
 			cache.clearAll();

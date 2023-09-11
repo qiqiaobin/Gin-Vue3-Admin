@@ -1,7 +1,7 @@
 package system
 
 import (
-	"tadmin/model/dto"
+	"tadmin/models/dto"
 	"tadmin/pkg/ginx"
 	"tadmin/service"
 
@@ -24,7 +24,7 @@ func (*SysMenuApi) Query(c *gin.Context) {
 	c.ShouldBindQuery(&query)
 
 	list, total, err := menuService.Query(query)
-	ginx.Complete(ginx.PageResult{List: list, TotalCount: total}, err, c)
+	ginx.Result(c, ginx.PageResult{List: list, TotalCount: total}, err)
 }
 
 // Add
@@ -39,7 +39,11 @@ func (*SysMenuApi) Add(c *gin.Context) {
 	c.ShouldBindJSON(&addDto)
 
 	err := menuService.Add(addDto)
-	ginx.CompleteWithMessage(err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, nil)
+	}
 }
 
 // Update
@@ -54,7 +58,11 @@ func (*SysMenuApi) Update(c *gin.Context) {
 	c.ShouldBindJSON(&updateDto)
 
 	err := menuService.Update(updateDto)
-	ginx.CompleteWithMessage(err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, nil)
+	}
 }
 
 // Delete
@@ -69,7 +77,11 @@ func (*SysMenuApi) Delete(c *gin.Context) {
 	c.ShouldBindJSON(&idInfoDto)
 
 	err := menuService.Delete(idInfoDto.Id)
-	ginx.CompleteWithMessage(err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, nil)
+	}
 }
 
 // Detail
@@ -84,7 +96,11 @@ func (*SysMenuApi) Detail(c *gin.Context) {
 	c.ShouldBindQuery(&idInfoDto)
 
 	obj, err := menuService.Detail(idInfoDto.Id)
-	ginx.Complete(obj, err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, obj)
+	}
 }
 
 // List
@@ -95,7 +111,11 @@ func (*SysMenuApi) Detail(c *gin.Context) {
 // @Router /system/menu/list [get]
 func (*SysMenuApi) List(c *gin.Context) {
 	objs, err := menuService.List()
-	ginx.Complete(objs, err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, objs)
+	}
 }
 
 // GetMenuTree
@@ -106,5 +126,9 @@ func (*SysMenuApi) List(c *gin.Context) {
 // @Router /system/menu/tree [get]
 func (*SysMenuApi) GetMenuTree(c *gin.Context) {
 	objs, err := menuService.GetMenuTree()
-	ginx.Complete(objs, err, c)
+	if err != nil {
+		ginx.ResFail(c, err.Error())
+	} else {
+		ginx.ResSucc(c, objs)
+	}
 }

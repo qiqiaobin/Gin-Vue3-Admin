@@ -36,22 +36,21 @@ func (s *SystemRouter) InitPrivateRouter(routerGroup *gin.RouterGroup) {
 	//权限
 	authRouter := routerGroup.Group("/system/auth")
 	{
-		authRouter.GET("userInfo", authApi.GetUserInfo) // 获取用户信息
-		authRouter.GET("menu", authApi.GetAuthMenu)     // 获取用户菜单（树状）
-		authRouter.POST("updatePwd", authApi.UpdatePwd) // 更新密码
+		authRouter.GET("userInfo", authApi.GetUserInfo)    // 获取用户信息
+		authRouter.GET("menu", authApi.GetAuthMenu)        // 获取用户菜单（树状）
+		authRouter.GET("/menuids", authApi.GetAuthMenuIds) // 获取用户菜单ids
 	}
 
 	//用户
 	userRouter := routerGroup.Group("/system/user")
 	{
-		userRouter.GET("query", userApi.Query)              // 用户分页查询
-		userRouter.POST("add", userApi.Add)                 // 添加用户
-		userRouter.POST("update", userApi.Update)           // 更新用户
-		userRouter.POST("delete", userApi.Delete)           // 删除用户
-		userRouter.GET("detail", userApi.Detail)            // 用户详情
-		userRouter.GET("list", userApi.List)                // 用户列表
-		userRouter.POST("resetPwd", userApi.ResetPwd)       // 重置密码
-		userRouter.POST("setStatus", userApi.SetUserStatus) // 设置状态
+		userRouter.GET("query", userApi.Query)               // 用户分页查询
+		userRouter.POST("add", userApi.Add)                  // 添加用户
+		userRouter.PUT(":id/update", userApi.UserUpdate)     // 更新用户
+		userRouter.DELETE(":id", userApi.UserDel)            // 删除用户
+		userRouter.GET("list", userApi.List)                 // 用户列表
+		userRouter.GET(":id", userApi.GetDetail)             // 用户详情
+		userRouter.PUT(":id/password", userApi.PasswordRset) // 重置密码
 	}
 
 	//菜单
@@ -69,11 +68,12 @@ func (s *SystemRouter) InitPrivateRouter(routerGroup *gin.RouterGroup) {
 	//角色
 	roleRouter := routerGroup.Group("/system/role")
 	{
-		roleRouter.GET("query", roleApi.Query)    // 角色查询
-		roleRouter.POST("add", roleApi.Add)       // 添加角色
-		roleRouter.POST("update", roleApi.Update) // 更新角色
-		roleRouter.POST("delete", roleApi.Delete) // 删除角色
-		roleRouter.GET("detail", roleApi.Detail)  // 角色详情
-		roleRouter.GET("list", roleApi.List)      // 角色列表
+		roleRouter.GET("query", roleApi.Query)                  // 角色查询
+		roleRouter.POST("add", roleApi.Add)                     // 添加角色
+		roleRouter.POST("update", roleApi.Update)               // 更新角色
+		roleRouter.PUT(":id/update", roleApi.RoleBindOperation) // 更新用户
+		roleRouter.DELETE(":id", roleApi.RoleDel)               // 删除角色
+		roleRouter.GET(":id", roleApi.GetDetail)                // 用户详情
+		roleRouter.GET("list", roleApi.List)                    // 角色列表
 	}
 }

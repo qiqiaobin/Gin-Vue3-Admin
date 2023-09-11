@@ -23,6 +23,7 @@
 				row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
+                <el-table-column type="selection" width="55" align="center"/>
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
@@ -74,10 +75,8 @@ const state = reactive({
 const getTableData = () => {
     state.tableData.loading = true;
 	menuApi.tree().then((res) => {
-		if (res.success) {
-			state.tableData.data = res.data;
-			state.tableData.loading = false;
-		}
+		state.tableData.data = res.data;
+		state.tableData.loading = false;
 	});
 };
 // 打开新增菜单弹窗
@@ -95,11 +94,9 @@ const handleDel = (row: any) => {
 		type: 'warning',
 	})
 		.then(() => {
-			menuApi.delete({ id: row.id }).then((res) => {
-				if (res.success) {
-					getTableData();
-					ElMessage.success('删除成功');
-				}
+			menuApi.delete({ id: row.id }).then(() => {
+				getTableData();
+				ElMessage.success('删除成功');
 			});
 		})
 		.catch(() => {});

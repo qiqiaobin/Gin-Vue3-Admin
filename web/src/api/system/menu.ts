@@ -21,7 +21,7 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 add(parameter:any) {
+	add(parameter:any) {
 		return request({
 			url: '/system/menu/add',
 			method: 'post',
@@ -33,7 +33,7 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 update(parameter:any) {
+	update(parameter:any) {
 		return request({
 			url: '/system/menu/update',
 			method: 'post',
@@ -45,7 +45,7 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 delete(parameter:any) {
+	delete(parameter:any) {
 		return request({
 			url: '/system/menu/delete',
 			method: 'post',
@@ -57,7 +57,7 @@ import request from '/@/utils/request';
 	 * @param parameter 
 	 * @returns 
 	 */
-	 detail(parameter:any) {
+	detail(parameter:any) {
 		return request({
 			url: '/system/menu/detail',
 			method: 'get',
@@ -68,7 +68,7 @@ import request from '/@/utils/request';
 	 * 菜单列表
 	 * @returns 
 	 */
-	 list() {
+	list() {
 		return request({
 			url: '/system/menu/list',
 			method: 'get',

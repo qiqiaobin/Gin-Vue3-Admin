@@ -3,17 +3,17 @@ package service
 import (
 	"errors"
 
-	"tadmin/model"
-	"tadmin/model/dto"
-	"tadmin/model/orm"
+	"tadmin/models"
+	"tadmin/models/dto"
 	"tadmin/pkg/cache"
+	"tadmin/pkg/orm"
 )
 
 type SysMenuService struct{}
 
 // Query 角色分页查询
 func (s *SysMenuService) Query(query dto.SysMenuQuery) (list []dto.SysRoleVo, total int64, err error) {
-	db := orm.DB.Model(&model.SysMenu{})
+	db := orm.DB.Model(&models.SysMenu{})
 	//查询条件
 	if query.MenuName != "" {
 		db = db.Where("`role_name` LIKE ?", "%"+query.MenuName+"%")
@@ -38,14 +38,14 @@ func (s *SysMenuService) Add(addDto dto.SysMenuAddDto) error {
 		if addDto.Path == "" {
 			return errors.New("路由地址不允许为空")
 		}
-		var menu = &model.SysMenu{}
+		var menu = &models.SysMenu{}
 		orm.DB.Where("path = ?", addDto.Path).First(&menu)
 		if menu.Id != 0 {
 			return errors.New("路由地址不允许重复")
 		}
 	}
 
-	var menu = &model.SysMenu{
+	var menu = &models.SysMenu{
 		ParentId:      addDto.ParentId,
 		MenuName:      addDto.MenuName,
 		MenuType:      addDto.MenuType,
@@ -77,14 +77,14 @@ func (s *SysMenuService) Update(updateDto dto.SysMenuUpdateDto) error {
 		if updateDto.Path == "" {
 			return errors.New("路由地址不允许为空")
 		}
-		var menu = model.SysMenu{}
+		var menu = models.SysMenu{}
 		orm.DB.Where("id != ? AND path = ?", updateDto.Id, updateDto.Path).First(&menu)
 		if menu.Id != 0 {
 			return errors.New("路由地址不允许重复")
 		}
 	}
 
-	err := orm.DB.Model(&model.SysMenu{}).Where("id = ?", updateDto.Id).Updates(map[string]interface{}{
+	err := orm.DB.Model(&models.SysMenu{}).Where("id = ?", updateDto.Id).Updates(map[string]interface{}{
 		"parent_id":      updateDto.ParentId,
 		"menu_name":      updateDto.MenuName,
 		"menu_type":      updateDto.MenuType,
@@ -110,7 +110,7 @@ func (s *SysMenuService) Update(updateDto dto.SysMenuUpdateDto) error {
 
 // Delete 删除角色
 func (s *SysMenuService) Delete(id int64) error {
-	err := orm.DB.Delete(&model.SysMenu{}, "id = ?", id).Error
+	err := orm.DB.Delete(&models.SysMenu{}, "id = ?", id).Error
 
 	//删除缓存
 	cache.Redis.DelByPattern(cache.CacheKeySysUserMenu)
@@ -120,20 +120,20 @@ func (s *SysMenuService) Delete(id int64) error {
 
 // Detail 获取角色详情
 func (s *SysMenuService) Detail(id int64) (obj dto.SysMenuVo, err error) {
-	err = orm.DB.Model(&model.SysMenu{}).Where("id = ?", id).Find(&obj).Error
+	err = orm.DB.Model(&models.SysMenu{}).Where("id = ?", id).Find(&obj).Error
 	return obj, err
 }
 
 // List 角色列表
 func (s *SysMenuService) List() (objs []dto.SysMenuVo, err error) {
-	err = orm.DB.Model(&model.SysMenu{}).Where("status = 0").Order("sort,id ASC").Scan(&objs).Error
+	err = orm.DB.Model(&models.SysMenu{}).Where("status = 0").Order("sort,id ASC").Scan(&objs).Error
 	return objs, err
 }
 
 // GetMenuTree 获取菜单树状
 func (s *SysMenuService) GetMenuTree() (objs []dto.SysMenuVo, err error) {
 
-	err = orm.DB.Model(&model.SysMenu{}).Order("sort,id ASC").Find(&objs).Error
+	err = orm.DB.Model(&models.SysMenu{}).Order("sort,id ASC").Find(&objs).Error
 	if err != nil {
 		return nil, err
 	}

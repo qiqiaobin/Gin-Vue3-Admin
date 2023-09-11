@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 
 	"tadmin/pkg/ginx"
@@ -18,30 +17,22 @@ func JwtAuth() gin.HandlerFunc {
 		tokenStr = strings.Replace(tokenStr, "Bearer ", "", -1)
 
 		if tokenStr == "" {
-			ginx.FailWithCode(http.StatusUnauthorized, "无权限访问，请求未携带token", context)
+			ginx.ResFailWithCode(context, 401, "无权限访问，请求未携带token")
 			context.Abort() //结束后续操作
 			return
 		}
 
 		// 解析token
-		token, err := jwt.ParseToken(tokenStr)
+		claims, err := jwt.ParseToken(tokenStr)
 		if err != nil {
-			ginx.FailWithCode(http.StatusUnauthorized, err.Error(), context)
-			context.Abort() //结束后续操作
-			return
-		}
-		//是否过期
-
-		// 获取 token 中的 claims
-		claims, ok := token.Claims.(*jwt.UserAuthClaims)
-		if !ok {
-			context.JSON(http.StatusUnauthorized, "无权限访问，错误token")
+			context.JSON(401, "无权限访问，错误token")
 			context.Abort()
 			return
 		}
 		fmt.Println("获取 token 中的 claims")
 		fmt.Println(claims)
-		context.Set("claims", claims)
+		context.Set("uid", claims.UserId)
+		context.Set("username", claims.UserName)
 		context.Next()
 	}
 }

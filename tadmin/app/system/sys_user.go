@@ -1,122 +1,137 @@
 package system
 
 import (
-	"tadmin/model/dto"
+	"strings"
+	"tadmin/models"
 	"tadmin/pkg/ginx"
-	"tadmin/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-var userService = &service.SysUserService{}
-
 type SysUserApi struct{}
 
-// Query
-// @Tags 用户
-// @Summary 用户查询
-// @Security ApiKeyAuth
-// @Param data query dto.SysUserQuery true "请求参数"
-// @Success 200 {object} response.JsonResult{data=response.PageResult{list=[]dto.SysUserVo}}
 // @Router /system/user/query [get]
 func (sysUserApi *SysUserApi) Query(c *gin.Context) {
-	var query dto.SysUserQuery
-	c.ShouldBindQuery(&query)
-	list, total, err := userService.Query(query)
-	ginx.Complete(ginx.PageResult{List: list, TotalCount: total}, err, c)
+	limit := ginx.QueryInt(c, "limit", 20)
+	query := ginx.QueryStr(c, "query", "")
+
+	list, total, err := models.UserGets(query, limit, ginx.Offset(c, limit))
+
+	ginx.Result(c, gin.H{
+		"list":  list,
+		"total": total,
+		//"admin": user.IsAdmin(),
+	}, err)
 }
 
-// Add
-// @Tags 用户
-// @Summary 添加用户
-// @Security ApiKeyAuth
-// @Param data body dto.SysUserAddDto true "请求参数"
-// @Success 200 {object} response.JsonResult
+type userAddForm struct {
+	Username string   `json:"username" binding:"required"`
+	Password string   `json:"password" binding:"required"`
+	Nickname string   `json:"nickname"`
+	Phone    string   `json:"phone"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles" binding:"required"`
+}
+
 // @Router /system/user/add [post]
 func (sysUserApi *SysUserApi) Add(c *gin.Context) {
-	var addDto dto.SysUserAddDto
+	var addDto userAddForm
 	c.ShouldBindJSON(&addDto)
-	err := userService.Add(addDto)
-	ginx.CompleteWithMessage(err, c)
+
+	password, err := models.CryptoPass(addDto.Password)
+
+	//一定要取到某个参数，取不到就panic
+	//user := c.MustGet("user").(*models.User)
+	u := models.User{
+		Username: addDto.Username,
+		Password: password,
+		Nickname: addDto.Nickname,
+		Phone:    addDto.Phone,
+		Email:    addDto.Email,
+		Roles:    strings.Join(addDto.Roles, " "),
+		//CreateBy: user.Username,
+		//UpdateBy: user.Username,
+	}
+	err = u.Add()
+
+	ginx.Result(c, u, err)
 }
 
-// Update
-// @Tags 用户
-// @Summary 更新用户
-// @Security ApiKeyAuth
-// @Param data body dto.SysUserUpdateDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/user/update [post]
-func (sysUserApi *SysUserApi) Update(c *gin.Context) {
-	var updateDto dto.SysUserUpdateDto
-	c.ShouldBindJSON(&updateDto)
-	err := userService.Update(updateDto)
-	ginx.CompleteWithMessage(err, c)
+type userProfileForm struct {
+	Nickname string   `json:"nickname"`
+	Phone    string   `json:"phone"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles"`
+	//Contacts ormx.JSONObj `json:"contacts"`
 }
 
-// Delete
-// @Tags 用户
-// @Summary 删除用户
-// @Security ApiKeyAuth
-// @Param data body request.IdInfoDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/user/delete [post]
-func (sysUserApi *SysUserApi) Delete(c *gin.Context) {
-	var idInfoDto ginx.IdInfoDto
-	c.ShouldBindJSON(&idInfoDto)
-	err := userService.Delete(idInfoDto.Id)
-	ginx.CompleteWithMessage(err, c)
+// @Router /system/user/:id/update [put]
+func (sysUserApi *SysUserApi) UserUpdate(c *gin.Context) {
+	var f userProfileForm
+	err := c.ShouldBindJSON(&f)
+
+	//if len(f.Roles) == 0 {
+	//	ginx.ResFailWithCode(c, 400, "用户角色为空")
+	//}
+
+	id := ginx.UrlParamInt64(c, "id")
+	target, err := models.UserGetById(id)
+	target.Nickname = f.Nickname
+	target.Phone = f.Phone
+	target.Email = f.Email
+	target.Roles = strings.Join(f.Roles, " ")
+	//target.Contacts = f.Contacts
+	//target.UpdateBy = c.MustGet("username").(string)
+	err = target.UpdateAllFields()
+
+	ginx.Result(c, nil, err)
 }
 
-// Detail
-// @Tags 用户
-// @Summary 获取用户详情
-// @Security ApiKeyAuth
-// @Param data query request.IdInfoDto true "用户id"
-// @Success 200 {object} response.JsonResult{data=dto.SysUserVo}
-// @Router /system/user/detail [get]
-func (sysUserApi *SysUserApi) Detail(c *gin.Context) {
-	var idInfoDto ginx.IdInfoDto
-	c.ShouldBindQuery(&idInfoDto)
-	obj, err := userService.Detail(idInfoDto.Id)
-	ginx.Complete(obj, err, c)
+// @Router /system/user/:id [delete]
+func (sysUserApi *SysUserApi) UserDel(c *gin.Context) {
+	id := ginx.UrlParamInt64(c, "id")
+	target, err := models.UserGetById(id)
+	//ginx.Dangerous(err)
+
+	//if target == nil {
+	//	ginx.NewRender(c).Message(nil)
+	//	return
+	//}
+
+	err = target.Del()
+
+	ginx.Result(c, nil, err)
 }
 
-// List
-// @Tags 用户
-// @Summary 用户列表
-// @Security ApiKeyAuth
-// @Success 200 {object} response.JsonResult{data=[]dto.SysUserVo}
+// @Router /system/user/:id [get]
+func (sysUserApi *SysUserApi) GetDetail(c *gin.Context) {
+
+	id := ginx.UrlParamInt64(c, "id")
+	obj, err := models.UserGetById(id)
+	//obj, err := userService.Detail(id)
+
+	ginx.Result(c, obj, err)
+}
+
 // @Router /system/user/list [get]
 func (sysUserApi *SysUserApi) List(c *gin.Context) {
-	objs, err := userService.List()
-	ginx.Complete(objs, err, c)
+	list, err := models.UserGetAll()
+	ginx.Result(c, list, err)
 }
 
-// ResetPwd
-// @Tags 用户
-// @Summary 重置密码
-// @Security ApiKeyAuth
-// @Param data body dto.ResetPwdDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/user/resetPwd [post]
-func (sysUserApi *SysUserApi) ResetPwd(c *gin.Context) {
-	var reqDto dto.ResetPwdDto
-	c.ShouldBindJSON(&reqDto)
-	err := userService.ResetPwd(reqDto)
-	ginx.CompleteWithMessage(err, c)
+type userPassword struct {
+	Password string `json:"password" binding:"required"`
 }
 
-// SetUserStatus
-// @Tags 用户
-// @Summary 设置用户状态
-// @Security ApiKeyAuth
-// @Param data body dto.SetUserStateDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/user/setStatus [post]
-func (sysUserApi *SysUserApi) SetUserStatus(c *gin.Context) {
-	var reqDto dto.SetUserStateDto
-	c.ShouldBindJSON(&reqDto)
-	err := userService.SetUserStatus(reqDto)
-	ginx.CompleteWithMessage(err, c)
+// @Router /system/user/:id/password [post]
+func (sysUserApi *SysUserApi) PasswordRset(c *gin.Context) {
+	var f userPassword
+	err := c.ShouldBindJSON(&f)
+
+	id := ginx.UrlParamInt64(c, "id")
+	user, err := models.UserGetById(id)
+	cryptoPass, err := models.CryptoPass(f.Password)
+	user.UpdatePassword(cryptoPass)
+
+	ginx.Result(c, nil, err)
 }

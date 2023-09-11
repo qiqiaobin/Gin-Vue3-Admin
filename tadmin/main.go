@@ -11,23 +11,12 @@ import (
 	"time"
 
 	"tadmin/conf"
-	docs "tadmin/docs"
-	"tadmin/model/orm"
 	"tadmin/pkg/cache"
 	"tadmin/pkg/logger"
+	"tadmin/pkg/orm"
 	"tadmin/router"
-
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title 系统模块
-// @version 1.0.0
-// @description 接口文档
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
 func main() {
 
 	os.Mkdir("logs", 0755)
@@ -46,12 +35,6 @@ func main() {
 	cache.InitRedis()
 	//初始化IP归属地查询服务
 	//ip2region.InitIp2region()
-
-	//初始化路由
-	var routers = router.InitRouters()
-
-	// 初始化swagger文档
-	InitSwagger(routers)
 
 	//启动服务（优雅关机）
 	addr := fmt.Sprintf(":%d", conf.Config.System.Port)
@@ -91,13 +74,4 @@ func main() {
 	}
 
 	fmt.Println("服务成功退出")
-}
-
-// InitSwagger 初始化swagger文档
-func InitSwagger(routers *gin.Engine) {
-	//swagger文档
-	docs.SwaggerInfo.Title = "gin-vue3-admin"
-	docs.SwaggerInfo.Description = "Swagger Admin API"
-	docs.SwaggerInfo.Version = "1.0"
-	routers.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

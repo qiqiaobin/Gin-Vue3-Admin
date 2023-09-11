@@ -10,14 +10,11 @@ export const useUserInfo = defineStore('userInfo', {
 	state: (): any => ({
 		userInfos: {
 			id: 0,
-			userName: '',
-			nickName: '',
-			userType: '',
+			username: '',
+			nickname: '',
 			email: '',
 			phone: '',
 			avatar: '',
-			status: '',
-			remark: '',
 			permission: []
 		},
 	}),
@@ -27,9 +24,7 @@ export const useUserInfo = defineStore('userInfo', {
 		 */
 		async loginAction(loginInfo: any) {
 			const res: any = await authApi.login(loginInfo)
-			if (res.success) {
-				cache.setToken(res.data)
-			}
+			cache.setToken(res.data)
 			return res
 		},
 		/**
@@ -38,9 +33,7 @@ export const useUserInfo = defineStore('userInfo', {
 		async setUserInfos() {		
 			//获取用户信息
 			const res: any = await authApi.getUserInfo()
-			if (res.success) {
-				this.userInfos = res.data;
-			}
+			this.userInfos = res.data;
 
 		},
         // 权限验证

@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"log"
-	"net/http"
 	"runtime/debug"
 
 	"tadmin/pkg/ginx"
@@ -18,7 +17,7 @@ func Recover(c *gin.Context) {
 			log.Printf("panic: %v\n", r)
 			debug.PrintStack()
 
-			ginx.FailWithCode(http.StatusInternalServerError, ErrorToString(r), c)
+			ginx.ResFailWithCode(c, 500, ErrorToString(r))
 			c.Abort() //终止操作
 		}
 	}()

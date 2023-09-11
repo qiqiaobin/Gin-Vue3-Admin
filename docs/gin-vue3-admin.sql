@@ -1,0 +1,218 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : n9e
+ Source Server Type    : MySQL
+ Source Server Version : 50724
+ Source Host           : 10.77.64.33:3306
+ Source Schema         : gin-vue3-admin
+
+ Target Server Type    : MySQL
+ Target Server Version : 50724
+ File Encoding         : 65001
+
+ Date: 11/09/2023 17:23:59
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for sys_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_menu`;
+CREATE TABLE `sys_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  `parent_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '父菜单ID',
+  `menu_name` varchar(50) NOT NULL COMMENT '菜单名称',
+  `menu_type` tinyint(4) NOT NULL COMMENT '菜单类型（0菜单，1按钮）',
+  `path` varchar(200) DEFAULT '' COMMENT '路由地址',
+  `redirect` varchar(200) DEFAULT '' COMMENT '重定向路由地址',
+  `link` varchar(255) DEFAULT NULL COMMENT '外部地址',
+  `is_iframe` tinyint(4) DEFAULT NULL COMMENT '是否内嵌',
+  `is_hide` tinyint(4) DEFAULT NULL COMMENT '是否隐藏',
+  `component` varchar(255) DEFAULT NULL COMMENT '组件路径',
+  `icon` varchar(100) DEFAULT NULL COMMENT '菜单图标',
+  `permission` varchar(255) DEFAULT NULL COMMENT '按钮权限（权限即接口）',
+  `request_method` varchar(255) DEFAULT NULL COMMENT '请求方法',
+  `status` tinyint(4) NOT NULL COMMENT '菜单状态（0启用 1停用）',
+  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10014 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单信息表';
+
+-- ----------------------------
+-- Records of sys_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_menu` VALUES (1, 0, '主页', 1, 'home', NULL, NULL, 0, 0, 'home/index', 'iconfont icon-shouye', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-02 22:01:01', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (10, 0, '系统管理', 1, 'system', '/system/user', NULL, 0, 0, NULL, 'iconfont icon-xitongshezhi', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-07 22:59:47', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (80, 0, '外链', 1, 'link1', NULL, 'https://www.json.cn/', 0, 0, '', 'ele-ChromeFilled', '', '', 0, 0, '2022-12-05 21:21:34', '2023-04-07 23:05:25', NULL, '');
+INSERT INTO `sys_menu` VALUES (81, 0, '内链', 1, 'link2', NULL, 'https://www.json.cn/', 1, 0, NULL, 'ele-ChromeFilled', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-07 22:59:29', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (90, 0, '公共接口', 1, 'common', NULL, '', 0, 1, '', 'iconfont icon-neiqianshujuchucun', '', '', 0, 0, '2023-03-27 15:14:23', '2023-04-07 23:32:05', NULL, '');
+INSERT INTO `sys_menu` VALUES (100, 10, '用户管理', 1, 'system/user', NULL, NULL, 0, 0, 'system/user/index', 'iconfont icon-icon-', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-02 21:59:50', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (110, 10, '菜单管理', 1, 'system/menu', NULL, NULL, 0, 0, 'system/menu/index', 'iconfont icon-caidan', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-02 22:00:14', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (120, 10, '角色管理', 1, 'system/role', NULL, NULL, 0, 0, 'system/role/index', 'ele-Avatar', NULL, NULL, 0, 0, '2022-12-05 21:21:34', '2023-04-07 22:59:41', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (901, 90, '用户信息', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_auth_userInfo', 'GET', 0, 0, '2023-03-27 15:21:03', '2023-03-27 15:21:03', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (902, 90, '用户菜单', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_auth_menu', 'GET', 0, 0, '2023-03-27 15:22:17', '2023-03-27 15:22:17', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (903, 90, '修改密码', 2, NULL, '', '', 0, 0, '', '', 'system_auth_updatePwd', 'POST', 0, 0, '2023-04-07 23:30:43', '2023-04-07 23:31:50', NULL, '');
+INSERT INTO `sys_menu` VALUES (1000, 100, '用户查询', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_query', 'GET', 0, 0, '2022-12-05 21:21:34', '2023-04-02 21:32:55', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1001, 100, '用户新增', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_add', 'POST', 0, 0, '2022-12-05 21:21:34', '2023-04-07 23:00:01', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1002, 100, '用户更新', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_update', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1003, 100, '用户删除', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_delete', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1004, 100, '用户详情', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_detail', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1005, 100, '用户列表', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_list', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1006, 100, '重置用户密码', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_resetPwd', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1007, 100, '设置用户状态', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_user_setStatus', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1100, 110, '菜单查询', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_query', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1101, 110, '菜单新增', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_add', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1102, 110, '菜单更新', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_update', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1103, 110, '菜单删除', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_delete', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1104, 110, '菜单详情', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_detail', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1105, 110, '菜单列表', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_list', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1106, 110, '菜单树形', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_menu_tree', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1200, 120, '角色查询', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_query', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1201, 120, '角色新增', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_add', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1202, 120, '角色更新', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_update', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1203, 120, '角色删除', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_delete', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1204, 120, '角色详情', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_detail', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1205, 120, '角色列表', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_list', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (10012, 0, 'test', 1, '/test', '', '', 0, 0, '/test', 'iconfont icon-siweidaotu', '', '', 0, 0, '2023-08-03 10:29:42', '2023-08-03 10:29:42', NULL, '');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for sys_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+  `name` varchar(100) NOT NULL COMMENT '角色名称',
+  `nickname` varchar(30) NOT NULL COMMENT '显示名称',
+  `note` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色信息表';
+
+-- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_role` VALUES (1, 'Admin', '管理员', '');
+INSERT INTO `sys_role` VALUES (10, 'Test', '测试', '测试功能');
+INSERT INTO `sys_role` VALUES (12, 'DEV', '开发', '开发人员');
+INSERT INTO `sys_role` VALUES (52, 'Tftest', '测试2', '测试功能更新');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for sys_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_menu`;
+CREATE TABLE `sys_role_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色和菜单关联id',
+  `role_name` varchar(128) NOT NULL COMMENT '角色名称',
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单id',
+  `operation` varchar(128) NOT NULL COMMENT '操作路由',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_role_menu` (`role_name`,`menu_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1334 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色和菜单关联表';
+
+-- ----------------------------
+-- Records of sys_role_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_role_menu` VALUES (52, 'Admin', 1, '/home');
+INSERT INTO `sys_role_menu` VALUES (53, 'Admin', 10, '/system');
+INSERT INTO `sys_role_menu` VALUES (54, 'Admin', 100, '/system/user');
+INSERT INTO `sys_role_menu` VALUES (55, 'Admin', 1000, '/system_user_query');
+INSERT INTO `sys_role_menu` VALUES (56, 'Admin', 1001, '/system_user_add');
+INSERT INTO `sys_role_menu` VALUES (57, 'Admin', 1002, '/system_user_update');
+INSERT INTO `sys_role_menu` VALUES (58, 'Admin', 1003, '/system_user_delete');
+INSERT INTO `sys_role_menu` VALUES (59, 'Admin', 1004, '/system_user_detail');
+INSERT INTO `sys_role_menu` VALUES (60, 'Admin', 1005, '/system_user_list');
+INSERT INTO `sys_role_menu` VALUES (61, 'Admin', 1006, '/system_user_resetPwd');
+INSERT INTO `sys_role_menu` VALUES (63, 'Admin', 110, '/system/menu');
+INSERT INTO `sys_role_menu` VALUES (64, 'Admin', 1100, '/system_menu_query');
+INSERT INTO `sys_role_menu` VALUES (65, 'Admin', 1101, '/system_menu_add');
+INSERT INTO `sys_role_menu` VALUES (66, 'Admin', 1102, '/system_menu_update');
+INSERT INTO `sys_role_menu` VALUES (67, 'Admin', 1103, '/system_menu_delete');
+INSERT INTO `sys_role_menu` VALUES (68, 'Admin', 1104, '/system_menu_detail');
+INSERT INTO `sys_role_menu` VALUES (69, 'Admin', 1105, '/system_menu_list');
+INSERT INTO `sys_role_menu` VALUES (70, 'Admin', 1106, '/system_menu_tree');
+INSERT INTO `sys_role_menu` VALUES (71, 'Admin', 120, '/system/role');
+INSERT INTO `sys_role_menu` VALUES (72, 'Admin', 1200, '/system_role_query');
+INSERT INTO `sys_role_menu` VALUES (73, 'Admin', 1201, '/system_role_add');
+INSERT INTO `sys_role_menu` VALUES (74, 'Admin', 1202, '/system_role_update');
+INSERT INTO `sys_role_menu` VALUES (75, 'Admin', 1203, '/system_role_delete');
+INSERT INTO `sys_role_menu` VALUES (76, 'Admin', 1204, '/system_role_detail');
+INSERT INTO `sys_role_menu` VALUES (77, 'Admin', 1205, '/system_role_list');
+INSERT INTO `sys_role_menu` VALUES (98, 'Admin', 80, '/link1');
+INSERT INTO `sys_role_menu` VALUES (99, 'Admin', 81, '/link2');
+INSERT INTO `sys_role_menu` VALUES (100, 'Admin', 90, '/common');
+INSERT INTO `sys_role_menu` VALUES (101, 'Admin', 901, '/system_auth_userInfo');
+INSERT INTO `sys_role_menu` VALUES (102, 'Admin', 902, '/system_auth_menu');
+INSERT INTO `sys_role_menu` VALUES (103, 'Admin', 903, '/system_auth_updatePwd');
+INSERT INTO `sys_role_menu` VALUES (1106, 'Test', 1, '/home');
+INSERT INTO `sys_role_menu` VALUES (1108, 'Test', 10, '/system');
+INSERT INTO `sys_role_menu` VALUES (1110, 'Test', 100, '/system/user');
+INSERT INTO `sys_role_menu` VALUES (1112, 'Test', 1002, '/system_user_update');
+INSERT INTO `sys_role_menu` VALUES (1114, 'Test', 1003, '/system_user_delete');
+INSERT INTO `sys_role_menu` VALUES (1116, 'Test', 1004, '/system_user_detail');
+INSERT INTO `sys_role_menu` VALUES (1118, 'Test', 1005, '/system_user_list');
+INSERT INTO `sys_role_menu` VALUES (1120, 'Test', 1006, '/system_user_resetPwd');
+INSERT INTO `sys_role_menu` VALUES (1124, 'Test', 1000, '/system_user_query');
+INSERT INTO `sys_role_menu` VALUES (1126, 'Test', 1001, '/system_user_add');
+INSERT INTO `sys_role_menu` VALUES (1128, 'Test', 110, '/system/menu');
+INSERT INTO `sys_role_menu` VALUES (1130, 'Test', 1100, '/system_menu_query');
+INSERT INTO `sys_role_menu` VALUES (1132, 'Test', 1101, '/system_menu_add');
+INSERT INTO `sys_role_menu` VALUES (1134, 'Test', 1102, '/system_menu_update');
+INSERT INTO `sys_role_menu` VALUES (1136, 'Test', 1103, '/system_menu_delete');
+INSERT INTO `sys_role_menu` VALUES (1138, 'Test', 1104, '/system_menu_detail');
+INSERT INTO `sys_role_menu` VALUES (1140, 'Test', 1105, '/system_menu_list');
+INSERT INTO `sys_role_menu` VALUES (1142, 'Test', 1106, '/system_menu_tree');
+INSERT INTO `sys_role_menu` VALUES (1144, 'Test', 120, '/system/role');
+INSERT INTO `sys_role_menu` VALUES (1146, 'Test', 1200, '/system_role_query');
+INSERT INTO `sys_role_menu` VALUES (1148, 'Test', 1201, '/system_role_add');
+INSERT INTO `sys_role_menu` VALUES (1150, 'Test', 1202, '/system_role_update');
+INSERT INTO `sys_role_menu` VALUES (1152, 'Test', 1203, '/system_role_delete');
+INSERT INTO `sys_role_menu` VALUES (1154, 'Test', 1204, '/system_role_detail');
+INSERT INTO `sys_role_menu` VALUES (1156, 'Test', 1205, '/system_role_list');
+INSERT INTO `sys_role_menu` VALUES (1158, 'Test', 90, '/common');
+INSERT INTO `sys_role_menu` VALUES (1160, 'Test', 901, '/system_auth_userInfo');
+INSERT INTO `sys_role_menu` VALUES (1162, 'Test', 902, '/system_auth_menu');
+INSERT INTO `sys_role_menu` VALUES (1164, 'Test', 903, '/system_auth_updatePwd');
+INSERT INTO `sys_role_menu` VALUES (1166, 'Test', 10012, '/Test');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `username` varchar(30) NOT NULL COMMENT '用户账号',
+  `nickname` varchar(30) NOT NULL COMMENT '用户昵称',
+  `usertype` tinyint(4) NOT NULL COMMENT '用户类型（0普通账号，1超级管理员）',
+  `email` varchar(50) DEFAULT NULL COMMENT '用户邮箱',
+  `phone` varchar(20) DEFAULT NULL COMMENT '手机号码',
+  `roles` varchar(20) DEFAULT NULL COMMENT '角色',
+  `password` varchar(100) NOT NULL COMMENT '密码',
+  `salt` varchar(50) DEFAULT NULL COMMENT '密码盐',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '头像地址',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_at` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+BEGIN;
+INSERT INTO `users` VALUES (1, 'superadmin', '超级管理员', 1, '999@qq.com', '19999999999', 'Admin', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', 'https://img1.baidu.com/it/u=948325104,3657174403&fm=253&fmt=auto&app=138&f=JPEG?w=388&h=514', '2022-11-08 14:27:47', '2022-11-08 14:27:47');
+INSERT INTO `users` VALUES (2, 'admin', '管理员', 0, '999@qq.com', '19999999999', 'Admin', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', NULL, '2022-11-08 14:27:47', '2022-11-08 14:27:47');
+INSERT INTO `users` VALUES (3, 'test', '测试用户', 0, '999@qq.com', '19999999999', 'Test', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', NULL, '2022-11-08 14:27:47', '2022-11-08 14:27:47');
+INSERT INTO `users` VALUES (78, 'ceshi2', '测试用户', 0, '123456@qq.com', '13566777888', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', '', '', '2023-09-01 09:04:32', '2023-09-01 15:22:53');
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;

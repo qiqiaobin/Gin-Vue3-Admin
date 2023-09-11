@@ -8,6 +8,8 @@ import (
 	"tadmin/middleware"
 )
 
+type Router struct{}
+
 // InitRouters 初始化路由
 func InitRouters() *gin.Engine {
 	routers := gin.Default()

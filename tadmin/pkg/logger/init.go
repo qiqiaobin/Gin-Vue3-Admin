@@ -69,7 +69,7 @@ func InitLogger() {
 	}
 
 	// 开启开发模式，堆栈跟踪
-	if conf.Config.Logger.Caller {
+	if conf.Config.Logger.ShowLine {
 		caller := zap.AddCaller()
 		// 构造日志
 		logger := zap.New(logCore, caller, zap.AddCallerSkip(1))

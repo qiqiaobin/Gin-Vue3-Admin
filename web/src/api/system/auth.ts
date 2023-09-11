@@ -31,7 +31,7 @@ import request from '/@/utils/request';
 	 * @param params 
 	 * @returns 
 	 */
-	 getUserInfo() {
+	getUserInfo() {
 		return request({
 			url: '/system/auth/userInfo',
 			method: 'get',
@@ -42,10 +42,17 @@ import request from '/@/utils/request';
 	 * @param params 
 	 * @returns 
 	 */
-	 getMenu() {
+	getMenu() {
 		return request({
 			url: '/system/auth/menu',
 			method: 'get',
+		});
+	}
+    getMenuIds(parameter:any) {
+		return request({
+			url: `/system/auth/menuids`,
+			method: 'get',
+            params: parameter,
 		});
 	}
 }

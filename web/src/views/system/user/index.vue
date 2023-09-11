@@ -7,7 +7,7 @@
 						v-model="state.tableData.param.userName"
 						placeholder="请输入用户账号/手机/昵称"
 						style="width: 180px"
-						@keyup.enter="getTableData"
+						@keyup.enter="getUserList"
 						clearable
 					></el-input>
                 </el-form-item>
@@ -18,13 +18,13 @@
 					</el-icon>
 					重置
 				</el-button>
-				<el-button size="default" type="primary" class="ml10" @click="getTableData">
+				<el-button size="default" type="primary" class="ml10" @click="getUserList">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
 					查询
 				</el-button>
-                <el-button size="default" type="primary" @click="openEditDialog()" v-permission="['system_user_add']" plain>
+                <el-button size="default" type="primary" @click="openAddDialog()" v-permission="['system_user_add']" plain>
 					<el-icon>
 						<ele-Plus />
 					</el-icon>
@@ -32,41 +32,34 @@
 				</el-button>
             </el-form-item>
 			</el-form>
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+			<el-table 
+            :data="state.tableData.data" 
+            v-loading="state.tableData.loading" 
+            style="width: 100%"
+            @selection-change="handleSelectionChange" >
+                <el-table-column type="selection" width="55" align="center"/>
 				<el-table-column prop="id" label="编号" width="60" fixed></el-table-column>
-				<el-table-column prop="userName" label="账户账号" fixed show-overflow-tooltip></el-table-column>
-				<el-table-column prop="nickName" label="用户昵称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="username" label="账户账号" fixed show-overflow-tooltip></el-table-column>
+				<el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="用户状态" show-overflow-tooltip>
+                <el-table-column prop="roles" label="角色" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="create_at" label="创建时间" show-overflow-tooltip>
+                    <template #default="scope">
+                        {{ dateFormat(scope.row.create_at) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="update_at" label="更新时间" show-overflow-tooltip>
+                    <template #default="scope">
+                        {{ dateFormat(scope.row.update_at) }}
+                    </template>
+                </el-table-column>
+				<el-table-column label="操作" width="200" fixed="right">
 					<template #default="scope">
-						<el-switch
-							v-model="scope.row.status"
-							inline-prompt
-							:active-value="0"
-							:inactive-value="1"
-							active-text="启用"
-							inactive-text="禁用"
-							@change="handleSetStatus(scope.row)"
-							:disabled="!useUserInfo().hasPermission('system_user_setStatus')"
-						></el-switch>
-					</template>
-				</el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="remark" label="用户描述" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="150" fixed="right">
-					<template #default="scope">
-						<el-button text type="primary" @click="openEditDialog(scope.row)" v-permission="['system_user_update']">修改</el-button>
+						<el-button text type="primary" @click="openEditDialog(scope.row.id)" v-permission="['system_user_update']">修改</el-button>
+                        <el-button text type="primary"  @click="handleResetPwd(scope.row)" v-permission="['system_user_delete']">重置密码</el-button>
 						<el-button text type="primary" @click="handleDel(scope.row)" v-permission="['system_user_delete']">删除</el-button>
-						<el-dropdown @command="(command:any) => handleCommand(command, scope.row)" v-permission="['system_user_resetPwd']">
-							<el-button text icon="ele-MoreFilled" size="small" type="primary" class="ml10 mt4" />
-							<template #dropdown>
-								<el-dropdown-menu>
-									<el-dropdown-item command="handleResetPwd">重置密码</el-dropdown-item>
-									<!-- <el-dropdown-item>分配角色</el-dropdown-item> -->
-								</el-dropdown-menu>
-							</template>
-						</el-dropdown>
+
 					</template>
 				</el-table-column>
 			</el-table>
@@ -84,7 +77,14 @@
 			>
 			</el-pagination>
 		</el-card>
-		<EditDialog ref="userDialogRef" @refresh="getTableData()" />
+    <!--新增用户弹出框 start-->
+    <AddUser ref="userAddRef" @refresh="getUserList()" />
+    <!--新增用户弹出框 end-->
+
+
+    <!--编辑用户弹出框 start-->
+	<EditUser :uid="state.EditDialog.id"  ref="userEditRef" @refresh="getUserList()" />
+    <!--编辑用户弹出框 end-->
 	</div>
 </template>
 
@@ -92,15 +92,23 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import userApi from '/@/api/system/user';
-import { useUserInfo } from '/@/stores/userInfo';
+import { dateFormat } from '/@/utils/formatTime';
 
 // 引入组件
-const EditDialog = defineAsyncComponent(() => import('/@/views/system/user/dialog.vue'));
+const EditUser = defineAsyncComponent(() => import('/@/views/system/user/EditUser.vue'));
+const AddUser = defineAsyncComponent(() => import('/@/views/system/user/AddUser.vue'));
 
 // 定义变量内容
 const queryFormRef = ref();
-const userDialogRef = ref();
+const userEditRef = ref();
+const userAddRef = ref();
 const state = reactive({
+    // 选中数组
+    ids: [],
+    // 非单个禁用
+    single: true,
+    // 非多个禁用
+    multiple: true,
 	tableData: {
 		data: [],
 		total: 0,
@@ -111,123 +119,97 @@ const state = reactive({
             userName: undefined,
 		},
 	},
+    EditDialog: {
+        id: 0,
+    },
 });
 
 // 页面加载时
 onMounted(() => {
-	getTableData();
+	getUserList();
 });
 
 
 // 重置表单
 const resetQueryForm = () => {
 	queryFormRef.value?.resetFields();
-	getTableData();
+	getUserList();
 };
 
-// 初始化表格数据
-const getTableData = () => {
+// 多选框选中数据
+const handleSelectionChange = (selection: any) => {
+  state.ids = selection.map((item: any) => item.roleId);
+  state.single = selection.length != 1;
+  state.multiple = !selection.length;
+};
+
+/** 查询用户列表 */
+const getUserList = async () => {
 	state.tableData.loading = true;
 	userApi.query(state.tableData.param).then((res) => {
-		if (res.success) {
-			state.tableData.data = res.data.list;
-			state.tableData.total = res.data.totalCount;
-			state.tableData.loading = false;
-		}
+		state.tableData.data = res.data.list;
+		state.tableData.total = res.data.total;
+		state.tableData.loading = false;
 	});
 };
 
-// 设置用户状态
-const handleSetStatus = (row: any) => {
-	let text = row.status === 0 ? '启用' : '禁用';
-	ElMessageBox.confirm(`是否确定${text}账号为：${row.userName}?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(() => {
-			userApi.setStatus({ userId: row.id, status: row.status }).then((res) => {
-				if (res.success) {
-					getTableData();
-					ElMessage.success('设置成功');
-				}
-			});
-		})
-		.catch(() => {
-			if (row.status == 0) {
-				row.status = 1;
-			} else {
-				row.status = 0;
-			}
-		});
+// 打开新增用户弹窗
+const openAddDialog = () => {
+	userAddRef.value.openDialog();
 };
 
-// 打开修改用户弹窗
-const openEditDialog = (row?: any) => {
-	userDialogRef.value.openDialog(row);
+// 打开编辑弹窗
+const openEditDialog = (id:number) => {
+    state.EditDialog.id = id;
+	userEditRef.value.openDialog(id);
 };
+
+
 // 删除用户
 const handleDel = (row: any) => {
-	if (row.userType === 1) {
+	if (row.username === "superadmin") {
 		ElMessage.error('超级管理员不允许删除');
 		return;
 	}
-	ElMessageBox.confirm(`此操作将永久删除账号：${row.userName}`, '提示', {
+	ElMessageBox.confirm(`此操作将永久删除账号：${row.username}`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
 		.then(() => {
-			userApi.delete({ id: row.id }).then((res) => {
-				if (res.success) {
-					getTableData();
-					ElMessage.success('删除成功');
-				}
+			//userApi.delete({ id: row.id }).then(() => {
+            userApi.userdel(row.id).then(() => {
+				getUserList();
+				ElMessage.success('删除成功');
 			});
 		})
 		.catch(() => {});
 };
 
-//更多操作触发
-const handleCommand = (command: string, row: any) => {
-	console.log('handleCommand：' + command);
-	switch (command) {
-		case 'handleResetPwd':
-			handleResetPwd(row);
-			break;
-
-		default:
-			break;
-	}
-};
 
 //重置密码
-const handleResetPwd = (row: any) => {
-	ElMessageBox.prompt(`请输入账号【${row.userName}】的新密码 `, '提示', {
+const handleResetPwd = (row: any ) => {
+	ElMessageBox.prompt(`请输入账号【${row.username}】的新密码 `, '修改密码', {
 		confirmButtonText: '确定',
 		cancelButtonText: '取消',
 		inputPattern: /^.{6,20}$/,
 		inputErrorMessage: '请输入6-20位密码',
 	})
-		.then(({ value }) => {
-			userApi.resetPwd({ userId: row.id, password: value }).then((res) => {
-				if (res.success) {
-					ElMessage.success('重置成功');
-				}
-			});
-		})
-		.catch(() => {});
+        .then(({ value }) => {
+        userApi.RsetPwd( row.id, { password: value } )
+            ElMessage.success('重置密码成功');
+    })
 };
 
 // 分页改变
 const onHandleSizeChange = (val: number) => {
 	state.tableData.param.pageSize = val;
-	getTableData();
+	getUserList();
 };
 // 分页改变
 const onHandleCurrentChange = (val: number) => {
 	state.tableData.param.pageNum = val;
-	getTableData();
+	getUserList();
 };
 </script>
 

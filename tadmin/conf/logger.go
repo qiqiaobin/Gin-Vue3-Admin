@@ -9,6 +9,6 @@ type Logger struct {
 	MaxBackups int    `toml:"max_backups"` // 保留的旧日志文件的最大数量
 	MaxAge     int    `toml:"max_age"`     // 保留旧日志文件的最大天数
 	Color      bool   `toml:"color"`
-	Caller     bool   `toml:"caller"`
+	ShowLine   bool   `toml:"ShowLine"`
 	Compress   bool   `mapstructure:"compress"` // 是否压缩
 }
