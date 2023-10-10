@@ -14,7 +14,7 @@ import { useRoutesList } from '/@/stores/routesList';
 import mittBus from '/@/utils/mitt';
 
 // 引入组件
-const User = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/user.vue'));
+const User = defineAsyncComponent(() => import('/@/layout/navBars/topBar/user.vue'));
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
 const Horizontal = defineAsyncComponent(() => import('/@/layout/navMenu/horizontal.vue'));
 
