@@ -55,7 +55,7 @@ watch(
 		i.layout-link-icon {
 			position: relative;
 			font-size: 100px;
-			color: var(--el-color-primary);
+			color: #3a84ff;
 			&::after {
 				content: '';
 				position: absolute;
@@ -84,7 +84,7 @@ watch(
 		}
 		.layout-link-msg {
 			font-size: 12px;
-			color: #182132;
+			color: var(--next-bg-topBarColor);
 			opacity: 0.7;
 			margin-top: 15px;
 		}

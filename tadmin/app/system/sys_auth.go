@@ -1,7 +1,7 @@
 package system
 
 import (
-	model "tadmin/models"
+	"tadmin/models"
 	"tadmin/pkg/ginx"
 	"tadmin/pkg/jwt"
 	"tadmin/pkg/logger"
@@ -55,9 +55,14 @@ func (*SysAuthApi) Login(c *gin.Context) {
 		return
 	}
 
-	var user model.User
+	//var user model.User
 
-	user, err := authService.PassLogin(loginDto.UserName, loginDto.Password)
+	user, err := models.PassLogin(loginDto.UserName, loginDto.Password)
+	if user == nil {
+		// Theoretically impossible
+		logger.Errorf("无效的用户名或者密码")
+		return
+	}
 	//生成token
 	var claims = jwt.UserAuthClaims{
 		UserId:   user.Id,

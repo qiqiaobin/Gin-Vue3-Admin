@@ -22,6 +22,9 @@
 	--next-color-seting-main: #e9eef3;
 	--next-color-seting-aside: #d3dce6;
 	--next-color-seting-header: #b3c0d1;
+  --el-text-color-primary: #979ba5;
+  --el-menu-active-color:#ffffff;
+  --el-menu-hover-text-color:#ffffff;
 }
 
 html,
@@ -47,7 +50,7 @@ body,
 	width: 100%;
 	height: 100%;
 	.layout-pd {
-		padding: 15px !important;
+		padding: 10px !important;
 	}
 	.layout-flex {
 		display: flex;
@@ -89,8 +92,7 @@ body,
 	}
 	// 用于界面高度自适应
 	.layout-padding {
-		@extend .layout-pd;
-		position: absolute;
+		@extend .layout-pd;		
 		left: 0;
 		top: 0;
 		height: 100%;
@@ -141,8 +143,6 @@ body,
 	.layout-aside-pc-1 {
 		width: 1px !important;
 		transition: width 0.3s ease;
-		position: relative;
-		left: -1px;
 	}
 	// 手机端左侧导航样式
 	.layout-aside-mobile {
@@ -196,7 +196,7 @@ body,
 ------------------------------- */
 #nprogress {
 	.bar {
-		background: #3a84ff !important;
+		background: #3a84ff  !important;
 		z-index: 9999999 !important;
 	}
 }

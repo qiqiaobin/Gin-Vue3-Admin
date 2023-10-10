@@ -80,10 +80,16 @@ const onSubmit = () => {
 		}
 
 		//更新
-		roleApi.update(props.rid,state.dataForm).then(() => {
-			ElMessage.success('更新成功');
-			emit('refresh'); //刷新页面
-			closeDialog();
+		roleApi.update(props.rid,state.dataForm).then((res) => {
+			if(res.msg === "请求成功"){
+                ElMessage.success('更新成功');
+			    emit('refresh'); //刷新页面
+			    closeDialog();
+            }else{
+                ElMessage.error(res.msg);
+			    emit('refresh'); //刷新页面
+			    closeDialog();
+            }
 		});
     });
 };

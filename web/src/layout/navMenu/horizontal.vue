@@ -1,35 +1,35 @@
 <template>
 	<div class="el-menu-horizontal-warp">
-		<el-menu router :default-active="state.defaultActive" background-color="transparent" mode="horizontal">
-			<template v-for="val in menuLists">
-				<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
-					<template #title>
-						<!--SvgIcon :name="val.meta.icon" /-->
-						<span>{{ val.meta.title }}</span>
-					</template>
-					<SubItem :chil="val.children" />
-				</el-sub-menu>
-				<template v-else>
-					<el-menu-item :index="val.path" :key="val.path">
-						<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
+			<el-menu router :default-active="state.defaultActive" :ellipsis="false" background-color="transparent" mode="horizontal">
+				<template v-for="val in menuLists">
+					<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
+						<template #title>
 							<!--SvgIcon :name="val.meta.icon" /-->
-							{{ val.meta.title }}
+							<span>{{ val.meta.title }}</span>
 						</template>
-						<template #title v-else>
-							<a class="w100" @click.prevent="onALinkClick(val)">
+						<SubItem :chil="val.children" />
+					</el-sub-menu>
+					<template v-else>
+						<el-menu-item :index="val.path" :key="val.path">
+							<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
 								<!--SvgIcon :name="val.meta.icon" /-->
 								{{ val.meta.title }}
-							</a>
-						</template>
-					</el-menu-item>
+							</template>
+							<template #title v-else>
+								<a class="w100" @click.prevent="onALinkClick(val)">
+									<!--SvgIcon :name="val.meta.icon" /-->
+									{{ val.meta.title }}
+								</a>
+							</template>
+						</el-menu-item>
+					</template>
 				</template>
-			</template>
-		</el-menu>
+			</el-menu>
 	</div>
 </template>
 
 <script setup lang="ts" name="navMenuHorizontal">
-import { defineAsyncComponent, reactive, computed, onBeforeMount } from 'vue';
+import { defineAsyncComponent, reactive, computed, onMounted, nextTick, onBeforeMount, ref } from 'vue';
 import { useRoute, onBeforeRouteUpdate, RouteRecordRaw } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
@@ -60,6 +60,7 @@ const state = reactive({
 const menuLists = computed(() => {
 	return <RouteItems>props.menuList;
 });
+
 // 路由过滤递归函数
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 	return arr
@@ -70,6 +71,7 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 			return item;
 		});
 };
+
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
 	const currentPathSplit = path.split('/');
@@ -84,25 +86,29 @@ const setSendClassicChildren = (path: string) => {
 	});
 	return currentData;
 };
+
 // 设置页面当前路由高亮
 const setCurrentRouterHighlight = (currentRoute: RouteToFrom) => {
-	const { path } = currentRoute;
+  const { path } = currentRoute;
 	state.defaultActive = `/${path?.split('/')[1]}`;
 };
+
 // 打开外部链接
 const onALinkClick = (val: RouteItem) => {
 	other.handleOpenLink(val);
 };
+
 // 页面加载前
 onBeforeMount(() => {
 	setCurrentRouterHighlight(route);
 });
+
 // 路由更新时
 onBeforeRouteUpdate((to) => {
 	// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
 	setCurrentRouterHighlight(to);
 	// 修复经典布局开启切割菜单时，点击tagsView后左侧导航菜单数据不变的问题
-	mittBus.emit('setSendClassicChildren', setSendClassicChildren(to.path));
+  mittBus.emit('setSendClassicChildren', setSendClassicChildren(to.path));
 });
 </script>
 

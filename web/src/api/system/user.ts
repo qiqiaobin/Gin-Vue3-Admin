@@ -11,7 +11,7 @@ class UserApi {
 	 */
 	query(parameter: any) {
 		return request({
-			url: '/system/user/query',
+			url: '/api/n9e/users',
 			method: 'get',
 			params: parameter,
 		});
@@ -23,7 +23,7 @@ class UserApi {
 	 */
 	add(parameter: any) {
 		return request({
-			url: '/system/user/add',
+			url: '/api/n9e/users',
 			method: 'post',
 			data: parameter,
 		});
@@ -35,7 +35,7 @@ class UserApi {
 	 */
     userupdate(id:number, data:any) {
 		return request({
-			url: `/system/user/${id}/update`,
+			url: `/api/n9e/${id}/update`,
 			method: 'put',
 			data: data,
 		});
@@ -47,7 +47,7 @@ class UserApi {
 	 */
     userdel(id:number) {
 		return request({
-			url: `/system/user/${id}`,
+			url: `/api/n9e/${id}`,
 			method: 'delete',
 		});
 	}
@@ -58,7 +58,7 @@ class UserApi {
 	 */
     getdetail(id:number) {
 		return request({
-			url: `/system/user/${id}`,
+			url: `/api/n9e/${id}`,
 			method: 'get',
 			//params: parameter
 		});
@@ -69,7 +69,7 @@ class UserApi {
 	 */
 	list() {
 		return request({
-			url: '/system/user/list',
+			url: '/api/n9e/list',
 			method: 'get',
 		});
 	}
@@ -81,7 +81,7 @@ class UserApi {
     RsetPwd(id:number, data:any) {
         return request({
             //url: '/system/user/'+uid+ '/password',
-            url: `/system/user/${id}/password`, 
+            url: `/api/n9e/${id}/password`, 
             method: 'put',
             data: data,
         });

@@ -11,17 +11,21 @@ import { defineStore } from 'pinia';
 export const useThemeConfig = defineStore('themeConfig', {
 	state: (): ThemeConfigState => ({
 		themeConfig: {
+			// 是否开启布局配置抽屉
+			isDrawer: false,
+
+			/**
+			 * 界面设置
+			 */
 			// 是否开启菜单水平折叠效果
 			isCollapse: false,
 
+			/**
+			 * 其它设置
+			 */
+
 			// 主页面切换动画：可选值"<slide-right|slide-left|opacitys>"，默认 slide-right
 			animation: 'slide-right',
-
-			/**
-			 * 后端控制路由
-			 */
-			// 是否开启后端控制路由
-			//isRequestRoutes: true,
 
 			/**
 			 * 全局网站标题 / 副标题
@@ -31,11 +35,11 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 网站副标题（登录页顶部文字）
 			globalViceTitle: 'vue3-admin',
 			// 网站副标题（登录页顶部文字）
-			globalViceTitleMsg: '专注、免费、开源、维护、解疑',
+			globalViceTitleMsg: '快速、敏捷、免费、开源',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
 			globalI18n: 'zh-cn',
 			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'large'
-			globalComponentSize: 'large',
+			globalComponentSize: 'default',
 		},
 	}),
 	actions: {

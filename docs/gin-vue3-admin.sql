@@ -14,8 +14,43 @@
  Date: 11/09/2023 17:23:59
 */
 
-SET NAMES utf8mb4;
+SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for sys_dict
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict`;
+CREATE TABLE `sys_dict` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典id',
+  `dict_name` varchar(100) DEFAULT NULL COMMENT '字典名称',
+  `dict_code` varchar(100) NOT NULL COMMENT '字典代码',
+  `dict_type` tinyint(4) DEFAULT NULL COMMENT '字典类型（0int，1string）',
+  `status` tinyint(4) NOT NULL COMMENT '状态（0启用 1停用）',
+  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_dict
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_dict` VALUES (1, '配置状态', 'config_status', 0, 0, '2023-04-06 16:07:38', '2023-04-06 16:07:38', NULL, '');
+INSERT INTO `sys_dict` VALUES (2, '字典状态', 'dict_status', 0, 0, '2023-04-06 16:13:27', '2023-04-06 16:13:27', NULL, '');
+INSERT INTO `sys_dict` VALUES (3, '字典类型', 'dict_type', 0, 0, '2023-04-06 16:13:50', '2023-04-06 16:13:50', NULL, '');
+INSERT INTO `sys_dict` VALUES (4, '字典选项状态', 'dict_item_status', 0, 0, '2023-04-06 16:14:41', '2023-04-06 16:14:41', NULL, '');
+INSERT INTO `sys_dict` VALUES (5, '菜单状态', 'menu_status', 0, 0, '2023-04-06 16:22:15', '2023-04-06 16:22:15', NULL, '');
+INSERT INTO `sys_dict` VALUES (6, '菜单类型', 'menu_type', 0, 0, '2023-04-06 16:22:31', '2023-04-06 16:22:31', NULL, '');
+INSERT INTO `sys_dict` VALUES (7, '角色状态', 'role_status', 0, 0, '2023-04-06 16:23:00', '2023-04-06 16:23:00', NULL, '');
+INSERT INTO `sys_dict` VALUES (8, '用户状态', 'user_status', 0, 0, '2023-04-06 16:23:16', '2023-04-06 16:23:16', NULL, '');
+INSERT INTO `sys_dict` VALUES (9, '用户类型', 'user_type', 0, 0, '2023-04-06 16:23:44', '2023-04-06 16:23:44', NULL, '');
+INSERT INTO `sys_dict` VALUES (10, '用户性别', 'user_gender', 0, 0, '2023-04-06 16:23:53', '2023-04-06 16:23:53', NULL, '');
+INSERT INTO `sys_dict` VALUES (12, '测试', 'test', 0, 0, '2023-10-09 11:09:07', '2023-10-09 11:09:07', NULL, '测试');
+COMMIT;
+
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -193,15 +228,15 @@ CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` varchar(30) NOT NULL COMMENT '用户账号',
   `nickname` varchar(30) NOT NULL COMMENT '用户昵称',
-  `usertype` tinyint(4) NOT NULL COMMENT '用户类型（0普通账号，1超级管理员）',
   `email` varchar(50) DEFAULT NULL COMMENT '用户邮箱',
   `phone` varchar(20) DEFAULT NULL COMMENT '手机号码',
   `roles` varchar(20) DEFAULT NULL COMMENT '角色',
   `password` varchar(100) NOT NULL COMMENT '密码',
-  `salt` varchar(50) DEFAULT NULL COMMENT '密码盐',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '头像地址',
+  `portrait` varchar(255) DEFAULT NULL COMMENT '头像地址',
   `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_by` varchar(64)  NOT NULL DEFAULT '',
   `update_at` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_by` varchar(64)  NOT NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
 
@@ -209,10 +244,10 @@ CREATE TABLE `users` (
 -- Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES (1, 'superadmin', '超级管理员', 1, '999@qq.com', '19999999999', 'Admin', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', 'https://img1.baidu.com/it/u=948325104,3657174403&fm=253&fmt=auto&app=138&f=JPEG?w=388&h=514', '2022-11-08 14:27:47', '2022-11-08 14:27:47');
-INSERT INTO `users` VALUES (2, 'admin', '管理员', 0, '999@qq.com', '19999999999', 'Admin', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', NULL, '2022-11-08 14:27:47', '2022-11-08 14:27:47');
-INSERT INTO `users` VALUES (3, 'test', '测试用户', 0, '999@qq.com', '19999999999', 'Test', 'ec71d37f4340c223896afd45aaf3cf06', '41b278387b85404', NULL, '2022-11-08 14:27:47', '2022-11-08 14:27:47');
-INSERT INTO `users` VALUES (78, 'ceshi2', '测试用户', 0, '123456@qq.com', '13566777888', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', '', '', '2023-09-01 09:04:32', '2023-09-01 15:22:53');
+INSERT INTO `users` VALUES (1, 'superadmin', '超级管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd',  'https://img1.baidu.com/it/u=948325104,3657174403&fm=253&fmt=auto&app=138&f=JPEG?w=388&h=514', '2022-11-08 14:27:47','system', '2022-11-08 14:27:47','system');
+INSERT INTO `users` VALUES (2, 'admin', '管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd',  NULL, '2022-11-08 14:27:47','system', '2022-11-08 14:27:47','system');
+INSERT INTO `users` VALUES (3, 'test', '测试用户', '999@qq.com', '19999999999', 'Test', 'be7bd798ee215d01f98092cc88d03fdd',  NULL, '2022-11-08 14:27:47', 'system', '2022-11-08 14:27:47','system');
+INSERT INTO `users` VALUES (78, 'ceshi2', '测试用户', '123456@qq.com', '13566777888', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', '', '2023-09-01 09:04:32','system', '2023-09-01 15:22:53','system');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -75,7 +75,7 @@ const onColClick = (v: unknown | string) => {
 	}
 	.icon-selector-active {
 		background-color: #ebf2ff;
-		border: 1px solid #9cc1ff;
+			border: 1px solid #9cc1ff;
 		i {
 			color: #3a84ff;
 		}

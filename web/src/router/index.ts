@@ -3,6 +3,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import pinia from '/@/stores/index';
 import { storeToRefs } from 'pinia';
+import { useKeepALiveNames } from '/@/stores/keepAliveNames';
 import { useRoutesList } from '/@/stores/routesList';
 import { Session } from '/@/utils/storage';
 import { staticRoutes, notFoundAndNoPower } from '/@/router/route';
@@ -59,6 +60,7 @@ export function formatFlatteningRoutes(arr: any) {
 export function formatTwoStageRoutes(arr: any) {
 	if (arr.length <= 0) return false;
 	const newArr: any = [];
+	const cacheList: Array<string> = [];
 	arr.forEach((v: any) => {
 		if (v.path === '/') {
 			newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
@@ -70,6 +72,13 @@ export function formatTwoStageRoutes(arr: any) {
 				v.meta['isDynamicPath'] = v.path;
 			}
 			newArr[0].children.push({ ...v });
+			// 存 name 值，keep-alive 中 include 使用，实现路由的缓存
+			// 路径：/@/layout/routerView/parent.vue
+			if (newArr[0].meta.isKeepAlive && v.meta.isKeepAlive) {
+				cacheList.push(v.name);
+				const stores = useKeepALiveNames(pinia);
+				stores.setCacheKeepAlive(cacheList);
+			}
 		}
 	});
 	return newArr;
@@ -95,8 +104,10 @@ router.beforeEach(async (to, from, next) => {
 			const storesRoutesList = useRoutesList(pinia);
 			const { routesList } = storeToRefs(storesRoutesList);
 			if (routesList.value.length === 0) {
+				
 				// 后端控制路由：路由数据初始化，防止刷新时丢失
 				await initBackEndControlRoutes();
+					
 				// 解决刷新时，一直跳 404 页面问题，关联问题 No match found for location with path 'xxx'
 				// to.query 防止页面刷新时，普通路由带参数时，参数丢失。动态路由（xxx/:id/:name"）isDynamic 无需处理
 				next({ path: to.path, query: to.query });

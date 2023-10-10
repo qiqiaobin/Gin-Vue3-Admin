@@ -14,7 +14,7 @@ import { useRoutesList } from '/@/stores/routesList';
 import mittBus from '/@/utils/mitt';
 
 // 引入组件
-const User = defineAsyncComponent(() => import('/@/layout/navBars/topBar/user.vue'));
+const User = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/user.vue'));
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
 const Horizontal = defineAsyncComponent(() => import('/@/layout/navMenu/horizontal.vue'));
 
@@ -28,11 +28,11 @@ const state = reactive({
 
 // 设置/过滤路由（非静态路由/是否显示在菜单中）
 const setFilterRoutes = () => {
-	state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
+  state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
 	const resData = setSendClassicChildren(route.path);
 	mittBus.emit('setSendClassicChildren', resData);
-
 };
+
 // 设置了分割菜单时，删除底下 children
 const delClassicChildren = <T extends ChilType>(arr: T[]): T[] => {
 	arr.map((v: T) => {
@@ -40,6 +40,7 @@ const delClassicChildren = <T extends ChilType>(arr: T[]): T[] => {
 	});
 	return arr;
 };
+
 // 路由过滤递归函数
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 	return arr
@@ -50,6 +51,7 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 			return item;
 		});
 };
+
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
 	const currentPathSplit = path.split('/');
@@ -64,6 +66,7 @@ const setSendClassicChildren = (path: string) => {
 	});
 	return currentData;
 };
+
 // 页面加载时
 onMounted(() => {
 	setFilterRoutes();
@@ -71,6 +74,7 @@ onMounted(() => {
 		setFilterRoutes();
 	});
 });
+
 // 页面卸载时
 onUnmounted(() => {
 	mittBus.off('getBreadcrumbIndexSetFilterRoutes', () => {});
@@ -83,6 +87,7 @@ onUnmounted(() => {
 	display: flex;
 	align-items: center;
 	background: #182132;
-	border-bottom: none !important;
+	//border-bottom: none !important;
+  border-bottom: 1px solid #f1f2f3;
 }
 </style>

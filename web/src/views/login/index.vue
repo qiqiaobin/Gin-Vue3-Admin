@@ -47,7 +47,7 @@ import { defineAsyncComponent, onMounted, reactive, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
-import logoMini from '/@/assets/logo.svg';
+import logoMini from '/@/assets/logo-mini.svg';
 import loginMain from '/@/assets/login-main.svg';
 import loginBg from '/@/assets/login-bg.svg';
 
@@ -98,14 +98,13 @@ onMounted(() => {
 			.login-left-logo-text {
 				display: flex;
 				flex-direction: column;
+				color: #EA5B5A;
 				span {
 					margin-left: 10px;
 					font-size: 28px;
-					color: #26a59a;
 				}
 				.login-left-logo-text-msg {
 					font-size: 12px;
-					color: #32a99e;
 				}
 			}
 		}
@@ -158,7 +157,7 @@ onMounted(() => {
 					left: 0;
 					width: 100%;
 					height: 3px;
-					background: linear-gradient(90deg, transparent, var(--el-color-primary));
+					background: linear-gradient(90deg, transparent, #3a84ff);
 					animation: loginLeft 3s linear infinite;
 				}
 				&::after {
@@ -167,7 +166,7 @@ onMounted(() => {
 					right: 2px;
 					width: 3px;
 					height: 100%;
-					background: linear-gradient(180deg, transparent, var(--el-color-primary));
+					background: linear-gradient(180deg, transparent, #3a84ff);
 					animation: loginTop 3s linear infinite;
 					animation-delay: 0.7s;
 				}
@@ -179,7 +178,7 @@ onMounted(() => {
 					right: -100%;
 					width: 100%;
 					height: 3px;
-					background: linear-gradient(270deg, transparent, var(--el-color-primary));
+					background: linear-gradient(270deg, transparent, #3a84ff);
 					animation: loginRight 3s linear infinite;
 					animation-delay: 1.4s;
 				}
@@ -189,7 +188,7 @@ onMounted(() => {
 					left: 0px;
 					width: 3px;
 					height: 100%;
-					background: linear-gradient(360deg, transparent, var(--el-color-primary));
+					background: linear-gradient(360deg, transparent, #3a84ff);
 					animation: loginBottom 3s linear infinite;
 					animation-delay: 2.1s;
 				}
@@ -220,7 +219,7 @@ onMounted(() => {
 						overflow: hidden;
 						cursor: pointer;
 						transition: all ease 0.3s;
-						color: var(--el-color-primary);
+						color: #3a84ff;
 						&-delta {
 							position: absolute;
 							width: 35px;
@@ -234,7 +233,7 @@ onMounted(() => {
 						&:hover {
 							opacity: 1;
 							transition: all ease 0.3s;
-							color: var(--el-color-primary) !important;
+							color: #3a84ff !important;
 						}
 						i {
 							width: 47px;

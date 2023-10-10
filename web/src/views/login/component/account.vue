@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
@@ -164,8 +164,8 @@ const signInSuccess = () => {
 		font-weight: 300;
 		margin-top: 15px;
 	}
-    .login-content-code {
-        width: 100%;
+  .login-content-code {
+    width: 100%;
 		padding: 0;
 		font-weight: bold;
 		letter-spacing: 5px;

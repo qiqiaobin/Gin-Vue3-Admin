@@ -17,25 +17,20 @@
 				<ele-Search />
 			</el-icon>
 		</div>
-		<div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
-			<el-badge :is-dot="true">
-				<el-icon title="消息">
-					<ele-Bell />
-				</el-icon>
-			</el-badge>
+		<div class="layout-navbars-breadcrumb-user-icon">
+			<el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
+				<template #reference>
+					<el-badge :is-dot="true">
+						<el-icon title="消息">
+							<ele-Bell />
+						</el-icon>
+					</el-badge>
+				</template>
+				<template #default>
+					<UserNews />
+				</template>
+			</el-popover>
 		</div>
-		<el-popover
-			ref="userNewsRef"
-			:virtual-ref="userNewsBadgeRef"
-			placement="bottom"
-			trigger="click"
-			transition="el-zoom-in-top"
-			virtual-triggering
-			:width="300"
-			:persistent="false"
-		>
-			<UserNews />
-		</el-popover>
 		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
 			<i
 				class="iconfont"
@@ -66,22 +61,21 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import { defineAsyncComponent, ref, unref, computed, reactive, onMounted } from 'vue';
+import { defineAsyncComponent, ref, computed, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessageBox, ElMessage, ClickOutside as vClickOutside } from 'element-plus';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import screenfull from 'screenfull';
 import { storeToRefs } from 'pinia';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import { Session, Local } from '/@/utils/storage';
+import {  Local } from '/@/utils/storage';
+import cache from '/@/utils/cache';
 
 // 引入组件
-const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
-const Search = defineAsyncComponent(() => import('/@/layout/navBars/topBar/search.vue'));
+const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
+const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 
 // 定义变量内容
-const userNewsRef = ref();
-const userNewsBadgeRef = ref();
 const router = useRouter();
 const stores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
@@ -96,7 +90,6 @@ const state = reactive({
 // 设置分割样式
 const layoutUserFlexNum = computed(() => {
 	let num: string | number = '';
-    num = '1';
 	return num;
 });
 // 全屏点击时
@@ -110,10 +103,6 @@ const onScreenfullClick = () => {
 		if (screenfull.isFullscreen) state.isScreenfull = true;
 		else state.isScreenfull = false;
 	});
-};
-// 消息通知点击时
-const onUserNewsClick = () => {
-	unref(userNewsRef).popperRef?.delayHide?.();
 };
 
 // 下拉菜单点击时
@@ -145,13 +134,13 @@ const onHandleCommandClick = (path: string) => {
 		})
 			.then(async () => {
 				// 清除缓存/token等
-				Session.clear();
+				cache.clearAll();
 				// 使用 reload 时，不需要调用 resetRoute() 重置路由
 				window.location.reload();
 			})
 			.catch(() => {});
 	} else if (path === 'wareHouse') {
-		window.open('https://gitee.com/lyt-top/vue-next-admin');
+		window.open('https://gitee.com/xiaofeichuan/go-fast-admin');
 	} else {
 		router.push(path);
 	}
@@ -170,7 +159,7 @@ const onComponentSizeChange = (size: string) => {
 };
 // 初始化组件大小/i18n
 const initI18nOrSize = (value: string, attr: string) => {
-	(<any>state)[attr] = Local.get('themeConfig')[value];
+	state[attr] = Local.get('themeConfig')[value];
 };
 // 页面加载时
 onMounted(() => {

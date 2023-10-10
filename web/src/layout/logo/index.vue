@@ -1,16 +1,16 @@
 <template>
 	<div class="layout-logo" @click="onThemeConfigChange">
-		<img :src="logoMini"  class="layout-logo-medium-img" />
+		<img :src="logoMini" class="layout-logo-medium-img" width="30"/>
 		<span>
-            {{ themeConfig.globalTitle }}
-        </span>
+      {{ themeConfig.globalTitle }}
+    </span>
 	</div>
 </template>
 
 <script setup lang="ts" name="layoutLogo">
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import logoMini from '/@/assets/logo.svg';
+import logoMini from '/@/assets/logo-mini.svg';
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();

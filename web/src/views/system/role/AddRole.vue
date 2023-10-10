@@ -76,10 +76,16 @@ const onSubmit = () => {
 		}
 
 		//添加
-		roleApi.add(state.AddForm).then(() => {
-			ElMessage.success('添加成功');
-			emit('refresh'); //刷新页面
-			closeDialog();
+		roleApi.add(state.AddForm).then((res) => {
+			if(res.msg === "请求成功"){
+                ElMessage.success('添加成功');
+			    emit('refresh'); //刷新页面
+			    closeDialog();
+            }else{
+                ElMessage.error(res.msg);
+			    emit('refresh'); //刷新页面
+			    closeDialog();
+            }
 		})
     });
 };

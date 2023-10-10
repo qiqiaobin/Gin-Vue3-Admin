@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 
@@ -9,7 +8,6 @@ import (
 	"tadmin/models/dto"
 	"tadmin/pkg/cache"
 	"tadmin/pkg/orm"
-	"tadmin/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
@@ -145,22 +143,6 @@ func BuildAuthMenuTree(menuList []models.SysMenu, parentId int64) (menus []dto.A
 		}
 	}
 	return menuRouters
-}
-
-// PassLogin 用户登录
-func (s *SysAuthService) PassLogin(username, pass string) (models.User, error) {
-	var lst models.User
-	err := orm.DB.Where("username = ?", username).First(&lst).Error
-	if err != nil {
-		return lst, errors.New("账号不存在")
-	}
-
-	pwd := utils.MD5(lst.Password + lst.Salt)
-	if pwd != lst.Password {
-		return lst, errors.New("密码错误")
-	}
-
-	return lst, nil
 }
 
 // GetAuthMenu 根据角色id获取用户菜单路由Ids

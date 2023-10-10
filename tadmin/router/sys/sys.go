@@ -17,6 +17,7 @@ var (
 	menuApi = &system.SysMenuApi{}
 	userApi = &system.SysUserApi{}
 	roleApi = &system.SysRoleApi{}
+	dictApi = &system.SysDictApi{}
 )
 
 // InitPublicRouter 初始化公开路由
@@ -42,15 +43,15 @@ func (s *SystemRouter) InitPrivateRouter(routerGroup *gin.RouterGroup) {
 	}
 
 	//用户
-	userRouter := routerGroup.Group("/system/user")
+	userRouter := routerGroup.Group("/api/n9e")
 	{
-		userRouter.GET("query", userApi.Query)               // 用户分页查询
-		userRouter.POST("add", userApi.Add)                  // 添加用户
-		userRouter.PUT(":id/update", userApi.UserUpdate)     // 更新用户
-		userRouter.DELETE(":id", userApi.UserDel)            // 删除用户
-		userRouter.GET("list", userApi.List)                 // 用户列表
-		userRouter.GET(":id", userApi.GetDetail)             // 用户详情
-		userRouter.PUT(":id/password", userApi.PasswordRset) // 重置密码
+		userRouter.GET("/users", userApi.Query)               // 用户分页查询
+		userRouter.POST("/users", userApi.Add)                // 添加用户
+		userRouter.PUT("/:id/update", userApi.UserUpdate)     // 更新用户
+		userRouter.DELETE("/:id", userApi.UserDel)            // 删除用户
+		userRouter.GET("/list", userApi.List)                 // 用户列表
+		userRouter.GET("/:id", userApi.GetDetail)             // 用户详情
+		userRouter.PUT("/:id/password", userApi.PasswordRset) // 重置密码
 	}
 
 	//菜单
@@ -75,5 +76,16 @@ func (s *SystemRouter) InitPrivateRouter(routerGroup *gin.RouterGroup) {
 		roleRouter.DELETE(":id", roleApi.RoleDel)               // 删除角色
 		roleRouter.GET(":id", roleApi.GetDetail)                // 用户详情
 		roleRouter.GET("list", roleApi.List)                    // 角色列表
+	}
+
+	//字典
+	dictRouter := routerGroup.Group("/system/dict")
+	{
+		dictRouter.GET("query", dictApi.Query)    // 字典查询
+		dictRouter.POST("add", dictApi.Add)       // 添加字典
+		dictRouter.POST("update", dictApi.Update) // 更新字典
+		dictRouter.POST("delete", dictApi.Delete) // 删除字典
+		dictRouter.GET("detail", dictApi.Detail)  // 字典详情
+		dictRouter.GET("list", dictApi.List)      // 字典列表
 	}
 }

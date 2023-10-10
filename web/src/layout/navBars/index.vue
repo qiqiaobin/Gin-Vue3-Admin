@@ -8,7 +8,7 @@
 import { defineAsyncComponent } from 'vue';
 
 // 引入组件
-const BreadcrumbIndex = defineAsyncComponent(() => import('/@/layout/navBars/topBar/index.vue'));
+const BreadcrumbIndex = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/index.vue'));
 
 // 定义变量内容
 </script>

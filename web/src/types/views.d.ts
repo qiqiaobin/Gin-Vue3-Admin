@@ -75,26 +75,6 @@ declare interface SysRoleState {
 	tableData: SysRoleTableType;
 }
 
-declare type TreeType = {
-	id: number;
-	label: string;
-	children?: TreeType[];
-};
-
-// user
-declare type RowUserType<T = any> = {
-	useruame: string;
-	userNickname: string;
-	roleSign: string;
-	department: string[];
-	phone: string;
-	email: string;
-	password: string;
-	overdueTime: T;
-	describe: string;
-	createTime: T;
-};
-
 interface SysUserTableType extends TableType {
 	data: RowUserType[];
 }
@@ -323,6 +303,5 @@ declare type TableDemoState = {
 		};
 		search: TableSearchType[];
 		param: EmptyObjectType;
-		printName: string;
 	};
 };

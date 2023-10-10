@@ -41,7 +41,7 @@ func (sysUserApi *SysUserApi) Add(c *gin.Context) {
 	password, err := models.CryptoPass(addDto.Password)
 
 	//一定要取到某个参数，取不到就panic
-	//user := c.MustGet("user").(*models.User)
+	user := c.MustGet("username").(string)
 	u := models.User{
 		Username: addDto.Username,
 		Password: password,
@@ -49,8 +49,8 @@ func (sysUserApi *SysUserApi) Add(c *gin.Context) {
 		Phone:    addDto.Phone,
 		Email:    addDto.Email,
 		Roles:    strings.Join(addDto.Roles, " "),
-		//CreateBy: user.Username,
-		//UpdateBy: user.Username,
+		CreateBy: user,
+		UpdateBy: user,
 	}
 	err = u.Add()
 
@@ -81,7 +81,7 @@ func (sysUserApi *SysUserApi) UserUpdate(c *gin.Context) {
 	target.Email = f.Email
 	target.Roles = strings.Join(f.Roles, " ")
 	//target.Contacts = f.Contacts
-	//target.UpdateBy = c.MustGet("username").(string)
+	target.UpdateBy = c.MustGet("username").(string)
 	err = target.UpdateAllFields()
 
 	ginx.Result(c, nil, err)
@@ -131,7 +131,7 @@ func (sysUserApi *SysUserApi) PasswordRset(c *gin.Context) {
 	id := ginx.UrlParamInt64(c, "id")
 	user, err := models.UserGetById(id)
 	cryptoPass, err := models.CryptoPass(f.Password)
-	user.UpdatePassword(cryptoPass)
+	user.UpdatePassword(cryptoPass, c.MustGet("username").(string))
 
 	ginx.Result(c, nil, err)
 }

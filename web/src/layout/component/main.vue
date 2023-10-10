@@ -1,5 +1,5 @@
 <template>
-	<el-main class="layout-main" :style="`minHeight: calc(100% - 51px`">
+	<el-main class="layout-main" :style="`minHeight: calc(100% - 51px)`">
 		<el-scrollbar
 			ref="layoutMainScrollbarRef"
 			class="layout-main-scroll layout-backtop-header-fixed"
@@ -26,8 +26,9 @@ const layoutMainScrollbarRef = ref();
 
 // 设置 Backtop 回到顶部
 const setBacktopClass = computed(() => {
-	return `.layout-backtop-header-fixed .el-scrollbar__wrap`;
+  return `.layout-backtop-header-fixed .el-scrollbar__wrap`;
 });
+
 // 页面加载前
 onMounted(() => {
 	NextLoading.done(600);

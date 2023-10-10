@@ -10,14 +10,14 @@
 		<template v-for="val in menuLists">
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 				<template #title>
-					<SvgIcon class="menu-icon" :name="val.meta.icon" />
+					<SvgIcon :name="val.meta.icon" />
 					<span>{{ val.meta.title }}</span>
 				</template>
 				<SubItem :chil="val.children" />
 			</el-sub-menu>
 			<template v-else>
 				<el-menu-item :index="val.path" :key="val.path">
-					<SvgIcon class="menu-icon" :name="val.meta.icon" />
+					<SvgIcon :name="val.meta.icon" />
 					<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
 						<span>{{ val.meta.title }}</span>
 					</template>
@@ -71,14 +71,17 @@ const setParentHighlight = (currentRoute: RouteToFrom) => {
 	if (pathSplit.length >= 4 && meta?.isHide) return pathSplit.splice(0, 3).join('/');
 	else return path;
 };
+
 // 打开外部链接
 const onALinkClick = (val: RouteItem) => {
 	other.handleOpenLink(val);
 };
+
 // 页面加载时
 onMounted(() => {
 	state.defaultActive = setParentHighlight(route);
 });
+
 // 路由更新时
 onBeforeRouteUpdate((to) => {
 	// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
@@ -86,11 +89,12 @@ onBeforeRouteUpdate((to) => {
 	const clientWidth = document.body.clientWidth;
 	if (clientWidth < 1000) themeConfig.value.isCollapse = false;
 });
+
 // 设置菜单的收起/展开
 watch(
-	() => themeConfig.value.isCollapse,
-	(isCollapse) => {
-		document.body.clientWidth <= 1000 ? (state.isCollapse = false) : (state.isCollapse = isCollapse);
+	themeConfig.value,
+	() => {
+		document.body.clientWidth <= 1000 ? (state.isCollapse = false) : (state.isCollapse = themeConfig.value.isCollapse);
 	},
 	{
 		immediate: true,

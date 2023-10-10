@@ -40,11 +40,11 @@ service.interceptors.response.use(
 			//请求成功
 			//if (!res.success) {
 				//业务处理错误
-				//ElMessage.error(res.message);
+			//	ElMessage.error(res.message);
 			//}
 			return Promise.resolve(res);
-            //return res.data;
-		} else if (res.code === 401) {
+		}
+		else if (res.code === 401) {
 			// token错误
 			cache.clearAll();
 			ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
@@ -54,8 +54,8 @@ service.interceptors.response.use(
 				})
 				.catch(() => { });
 			return Promise.reject(res);
-			
-		} else {
+		}
+		else {
 			//其他异常
 			ElMessage.error(res.message);
 			return Promise.reject(res);
