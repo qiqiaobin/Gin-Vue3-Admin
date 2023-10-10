@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { Session } from '/@/utils/storage';
 import qs from 'qs';
 import cache from '/@/utils/cache';
 
@@ -17,11 +18,10 @@ const service: AxiosInstance = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(
-	(config: AxiosRequestConfig) => {
+	(config) => {
 		// 在发送请求之前做些什么 token
-		var token = cache.getToken();
-		if (token) {
-			config.headers!['Authorization'] = `Bearer ${token}`;
+		if (Session.get('token')) {
+			config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
 		}
 		return config;
 	},
@@ -40,13 +40,13 @@ service.interceptors.response.use(
 			//请求成功
 			//if (!res.success) {
 				//业务处理错误
-			//	ElMessage.error(res.message);
+				//ElMessage.error(res.message);
 			//}
 			return Promise.resolve(res);
-		}
-		else if (res.code === 401) {
+            //return res.data;
+		} else if (res.code === 401) {
 			// token错误
-			cache.clearAll();
+			Session.clear(); // 清除浏览器全部临时缓存
 			ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
 				.then(() => {
 					// 去登录页
@@ -54,8 +54,8 @@ service.interceptors.response.use(
 				})
 				.catch(() => { });
 			return Promise.reject(res);
-		}
-		else {
+			
+		} else {
 			//其他异常
 			ElMessage.error(res.message);
 			return Promise.reject(res);

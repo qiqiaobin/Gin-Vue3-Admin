@@ -11,10 +11,10 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 11/09/2023 17:23:59
+ Date: 10/10/2023 14:00:19
 */
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -51,7 +51,6 @@ INSERT INTO `sys_dict` VALUES (10, '用户性别', 'user_gender', 0, 0, '2023-04
 INSERT INTO `sys_dict` VALUES (12, '测试', 'test', 0, 0, '2023-10-09 11:09:07', '2023-10-09 11:09:07', NULL, '测试');
 COMMIT;
 
-
 -- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
@@ -77,7 +76,7 @@ CREATE TABLE `sys_menu` (
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10014 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=10016 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单信息表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -115,7 +114,8 @@ INSERT INTO `sys_menu` VALUES (1202, 120, '角色更新', 2, NULL, NULL, NULL, 0
 INSERT INTO `sys_menu` VALUES (1203, 120, '角色删除', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_delete', 'POST', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1204, 120, '角色详情', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_detail', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1205, 120, '角色列表', 2, NULL, NULL, NULL, 0, 0, NULL, NULL, 'system_role_list', 'GET', 0, NULL, '2022-12-05 21:21:34', '2022-12-05 21:21:34', NULL, NULL);
-INSERT INTO `sys_menu` VALUES (10012, 0, 'test', 1, '/test', '', '', 0, 0, '/test', 'iconfont icon-siweidaotu', '', '', 0, 0, '2023-08-03 10:29:42', '2023-08-03 10:29:42', NULL, '');
+INSERT INTO `sys_menu` VALUES (10012, 0, 'test', 1, 'test', '', '', 0, 0, '/test', 'iconfont icon-siweidaotu', '', '', 0, 0, '2023-08-03 10:29:42', '2023-08-03 10:29:42', NULL, '');
+INSERT INTO `sys_menu` VALUES (10014, 10, '字典管理', 1, 'system/dict', '', '', 0, 0, 'system/dict/index', 'ele-EditPen', '', '', 0, 0, '2023-10-09 17:46:41', '2023-10-09 17:46:41', NULL, '');
 COMMIT;
 
 -- ----------------------------
@@ -151,7 +151,7 @@ CREATE TABLE `sys_role_menu` (
   `operation` varchar(128) NOT NULL COMMENT '操作路由',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `uk_role_menu` (`role_name`,`menu_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1334 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色和菜单关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=1390 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色和菜单关联表';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -218,6 +218,34 @@ INSERT INTO `sys_role_menu` VALUES (1160, 'Test', 901, '/system_auth_userInfo');
 INSERT INTO `sys_role_menu` VALUES (1162, 'Test', 902, '/system_auth_menu');
 INSERT INTO `sys_role_menu` VALUES (1164, 'Test', 903, '/system_auth_updatePwd');
 INSERT INTO `sys_role_menu` VALUES (1166, 'Test', 10012, '/Test');
+INSERT INTO `sys_role_menu` VALUES (1334, 'DEV', 1, '');
+INSERT INTO `sys_role_menu` VALUES (1336, 'DEV', 10, '');
+INSERT INTO `sys_role_menu` VALUES (1338, 'DEV', 100, '');
+INSERT INTO `sys_role_menu` VALUES (1340, 'DEV', 1002, '');
+INSERT INTO `sys_role_menu` VALUES (1342, 'DEV', 1003, '');
+INSERT INTO `sys_role_menu` VALUES (1344, 'DEV', 1004, '');
+INSERT INTO `sys_role_menu` VALUES (1346, 'DEV', 1005, '');
+INSERT INTO `sys_role_menu` VALUES (1348, 'DEV', 1006, '');
+INSERT INTO `sys_role_menu` VALUES (1350, 'DEV', 1007, '');
+INSERT INTO `sys_role_menu` VALUES (1352, 'DEV', 1000, '');
+INSERT INTO `sys_role_menu` VALUES (1354, 'DEV', 1001, '');
+INSERT INTO `sys_role_menu` VALUES (1356, 'DEV', 110, '');
+INSERT INTO `sys_role_menu` VALUES (1358, 'DEV', 1100, '');
+INSERT INTO `sys_role_menu` VALUES (1360, 'DEV', 1101, '');
+INSERT INTO `sys_role_menu` VALUES (1362, 'DEV', 1102, '');
+INSERT INTO `sys_role_menu` VALUES (1364, 'DEV', 1103, '');
+INSERT INTO `sys_role_menu` VALUES (1366, 'DEV', 1104, '');
+INSERT INTO `sys_role_menu` VALUES (1368, 'DEV', 1105, '');
+INSERT INTO `sys_role_menu` VALUES (1370, 'DEV', 1106, '');
+INSERT INTO `sys_role_menu` VALUES (1372, 'DEV', 120, '');
+INSERT INTO `sys_role_menu` VALUES (1374, 'DEV', 1200, '');
+INSERT INTO `sys_role_menu` VALUES (1376, 'DEV', 1201, '');
+INSERT INTO `sys_role_menu` VALUES (1378, 'DEV', 1202, '');
+INSERT INTO `sys_role_menu` VALUES (1380, 'DEV', 1203, '');
+INSERT INTO `sys_role_menu` VALUES (1382, 'DEV', 1204, '');
+INSERT INTO `sys_role_menu` VALUES (1384, 'DEV', 1205, '');
+INSERT INTO `sys_role_menu` VALUES (1386, 'DEV', 80, '');
+INSERT INTO `sys_role_menu` VALUES (1388, 'DEV', 81, '');
 COMMIT;
 
 -- ----------------------------
@@ -234,20 +262,21 @@ CREATE TABLE `users` (
   `password` varchar(100) NOT NULL COMMENT '密码',
   `portrait` varchar(255) DEFAULT NULL COMMENT '头像地址',
   `create_at` datetime DEFAULT NULL COMMENT '创建时间',
-  `create_by` varchar(64)  NOT NULL DEFAULT '',
+  `create_by` varchar(64) NOT NULL DEFAULT '',
   `update_at` datetime DEFAULT NULL COMMENT '更新时间',
-  `update_by` varchar(64)  NOT NULL DEFAULT '',
+  `update_by` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES (1, 'superadmin', '超级管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd',  'https://img1.baidu.com/it/u=948325104,3657174403&fm=253&fmt=auto&app=138&f=JPEG?w=388&h=514', '2022-11-08 14:27:47','system', '2022-11-08 14:27:47','system');
-INSERT INTO `users` VALUES (2, 'admin', '管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd',  NULL, '2022-11-08 14:27:47','system', '2022-11-08 14:27:47','system');
-INSERT INTO `users` VALUES (3, 'test', '测试用户', '999@qq.com', '19999999999', 'Test', 'be7bd798ee215d01f98092cc88d03fdd',  NULL, '2022-11-08 14:27:47', 'system', '2022-11-08 14:27:47','system');
-INSERT INTO `users` VALUES (78, 'ceshi2', '测试用户', '123456@qq.com', '13566777888', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', '', '2023-09-01 09:04:32','system', '2023-09-01 15:22:53','system');
+INSERT INTO `users` VALUES (1, 'superadmin', '超级管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd', 'https://img1.baidu.com/it/u=948325104,3657174403&fm=253&fmt=auto&app=138&f=JPEG?w=388&h=514', '2022-11-08 14:27:47', 'system', '2022-11-08 14:27:47', 'system');
+INSERT INTO `users` VALUES (2, 'admin', '管理员', '999@qq.com', '19999999999', 'Admin', 'be7bd798ee215d01f98092cc88d03fdd', NULL, '2022-11-08 14:27:47', 'system', '2022-11-08 14:27:47', 'system');
+INSERT INTO `users` VALUES (3, 'test', '测试用户', '999@qq.com', '19999999999', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', NULL, '2022-11-08 14:27:47', 'system', '2022-11-08 14:27:47', 'system');
+INSERT INTO `users` VALUES (78, 'ceshi2', '测试用户', '123456@qq.com', '13566777888', 'Test', 'be7bd798ee215d01f98092cc88d03fdd', '', '2023-09-01 09:04:32', 'system', '2023-09-01 15:22:53', 'system');
+INSERT INTO `users` VALUES (80, 'ceshi', '测试新增', '123456@qq.com', '13566666666', '', 'be7bd798ee215d01f98092cc88d03fdd', '', '2023-09-14 10:37:39', 'superadmin', '2023-09-14 10:37:39', 'superadmin');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

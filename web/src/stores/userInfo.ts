@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import authApi from '/@/api/system/auth';
-import cache from '/@/utils/cache';
 
 /**
  * 用户信息
+ * @methods setUserInfos 设置用户信息
  */
 export const useUserInfo = defineStore('userInfo', {
 	state: (): any => ({
@@ -19,22 +19,15 @@ export const useUserInfo = defineStore('userInfo', {
 	}),
 	actions: {
 		/**
-		 * 登录
-		 */
-		async loginAction(loginInfo: any) {
-			const res: any = await authApi.login(loginInfo)
-			cache.setToken(res.data)
-			return res
-		},
-		/**
 		 * 用户信息
 		 */
 		async setUserInfos() {		
 			//获取用户信息
 			const res: any = await authApi.getUserInfo()
 			this.userInfos = res.data;
-		},		
-		// 权限验证
+
+		},
+        // 权限验证
 		hasPermission(permissions: string[]) {
 			let hasPermissions = false;
 			if (permissions.length > 0) {
@@ -47,6 +40,6 @@ export const useUserInfo = defineStore('userInfo', {
 				})
 			}
 			return hasPermissions;
-		}
+		}	
 	},
 });

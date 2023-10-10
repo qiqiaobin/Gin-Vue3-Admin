@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts" name="noPower">
-import cache from '/@/utils/cache';
+import { Session } from '/@/utils/storage';
 
 const onSetAuth = () => {
 	// 清除缓存/token等
-	cache.clearAll();
+	Session.clear();
 	// 使用 reload 时，不需要调用 resetRoute() 重置路由
 	window.location.reload();
 };

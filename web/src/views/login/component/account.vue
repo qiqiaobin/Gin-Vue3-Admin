@@ -46,18 +46,17 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, onMounted } from 'vue';
+import { reactive, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import Cookies from 'js-cookie';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
+import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
 import authApi from '/@/api/system/auth';
-import { useUserInfo } from '/@/stores/userInfo';
-import cache from '/@/utils/cache';
 
 // 定义变量内容
-const userInfoStore = useUserInfo();
 const route = useRoute();
 const router = useRouter();
 const state = reactive({
@@ -93,48 +92,61 @@ const getCaptchaImage = () => {
 	});
 };
 
+// 时间获取
+const currentTime = computed(() => {
+	return formatAxis(new Date());
+});
 // 登录
 const onSignIn = async () => {
-	var res = await userInfoStore.loginAction(state.loginForm);
-	if (res.data) {
-		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		const isSuccess = await initBackEndControlRoutes();
-
-		if (isSuccess) {
-			// 登录成功
-			signInSuccess();
-		} else {
-			ElMessage.warning('抱歉，您没有登录权限');
-			cache.clearAll();
-		}
-		state.loading.signIn = false;
-	} else {
-		getCaptchaImage();
-		state.loading.signIn = false;
-	}
+  state.loading.signIn = true;
+  let res;
+  try {
+    res = await authApi.login(state.loginForm);
+  } catch (e) {
+    state.loading.signIn = false;
+    state.loginForm.captchaId = "";
+    getCaptchaImage();
+    return;
+  }
+	//var res = await authApi.login(state.loginForm);
+  //let loginRes = loginRespon.data;
+	// 存储 token 到浏览器缓存
+	Session.set('token', res.data);
+	// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
+	Cookies.set('username', state.loginForm.userName);
+	// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+	// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+	const isNoPower = await initBackEndControlRoutes();
+  signInSuccess(isNoPower);
 };
 // 登录成功后的跳转
-const signInSuccess = () => {
-	// TODO：带参数、重定向路径页面测试
-	// 登录成功，跳到转首页
-	// 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
-	console.log(route);
-	if (route.query?.redirect) {
-		router.push({
-			path: <string>route.query?.redirect,
-			query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
-		});
+const signInSuccess = (isNoPower: boolean | undefined) => {
+  if (isNoPower) {
+		ElMessage.warning('抱歉，您没有登录权限');
+		Session.clear();
 	} else {
-		router.push('/');
-	}
+    // 初始化登录成功时间问候语
+    let currentTimeInfo = currentTime.value;
+	  // TODO：带参数、重定向路径页面测试
+	  // 登录成功，跳到转首页
+	  // 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
+	  //console.log(route);
+	  if (route.query?.redirect) {
+		  router.push({
+			  path: <string>route.query?.redirect,
+			  query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
+		  });
+	  } else {
+		  router.push('/');
+	  }
 
-	// 登录成功提示
-	var currentTimeInfo = formatAxis(new Date());
-	const signInText = '欢迎回来！';
-	ElMessage.success(`${currentTimeInfo}，${signInText}`);
-	// 添加 loading，防止第一次进入界面时出现短暂空白
-	NextLoading.start();
+	  // 登录成功提示
+	  const signInText = '欢迎回来！';
+	  ElMessage.success(`${currentTimeInfo}，${signInText}`);
+	  // 添加 loading，防止第一次进入界面时出现短暂空白
+	  NextLoading.start();
+  }
+	state.loading.signIn = false;
 };
 </script>
 
@@ -170,28 +182,28 @@ const signInSuccess = () => {
 		font-weight: bold;
 		letter-spacing: 5px;
 
-        .login-content-code-img {
-            width: 100%;
-            height: 40px;
-            line-height: 40px;
-            background-color: #ffffff;
-            border: 1px solid rgb(220, 223, 230);
-            color: #333;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 5px;
-            text-indent: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: all ease 0.2s;
-            border-radius: 4px;
-            user-select: none;
+    .login-content-code-img {
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      background-color: #ffffff;
+      border: 1px solid rgb(220, 223, 230);
+      color: #333;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-indent: 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: all ease 0.2s;
+      border-radius: 4px;
+      user-select: none;
 
-            &:hover {
-                border-color: #c0c4cc;
-                transition: all ease 0.2s;
-            }
-        }
+      &:hover {
+        border-color: #c0c4cc;
+        transition: all ease 0.2s;
+      }
     }
+  }
 }
 </style>

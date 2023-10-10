@@ -32,7 +32,7 @@ onBeforeMount(() => {
 	// 设置批量第三方 js
 	setIntroduction.jsCdn();
 });
-// 页面加载时
+// 页面加载时eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 onMounted(() => {
 	nextTick(() => {
 		// 监听布局配'置弹窗点击打开
@@ -42,7 +42,7 @@ onMounted(() => {
 		// 获取缓存中的布局配置
 		if (Local.get('themeConfig')) {
 			storesThemeConfig.setThemeConfig({ themeConfig: Local.get('themeConfig') });
-			document.documentElement.style.cssText = Local.get('themeConfigStyle');
+			document.documentElement.style.cssText = Local.get('thffffffffffffffffemeConfigStyle');
 		}
 	});
 });
