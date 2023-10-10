@@ -5,13 +5,12 @@
 </template>
 
 <script setup lang="ts" name="app">
-import { computed, ref, onBeforeMount, onMounted, onUnmounted, nextTick, watch } from 'vue';
+import { computed, ref, onBeforeMount, onMounted, nextTick, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import { Local } from '/@/utils/storage';
-import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
 
 // 引入组件
@@ -32,24 +31,17 @@ onBeforeMount(() => {
 	// 设置批量第三方 js
 	setIntroduction.jsCdn();
 });
-// 页面加载时eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+// 页面加载时
 onMounted(() => {
 	nextTick(() => {
-		// 监听布局配'置弹窗点击打开
-		mittBus.on('openSetingsDrawer', () => {
-			setingsRef.value.openDrawer();
-		});
 		// 获取缓存中的布局配置
 		if (Local.get('themeConfig')) {
 			storesThemeConfig.setThemeConfig({ themeConfig: Local.get('themeConfig') });
-			document.documentElement.style.cssText = Local.get('thffffffffffffffffemeConfigStyle');
+			document.documentElement.style.cssText = Local.get('themeConfigStyle');
 		}
 	});
 });
-// 页面销毁时，关闭监听布局配置/i18n监听
-onUnmounted(() => {
-	mittBus.off('openSetingsDrawer', () => {});
-});
+
 // 监听路由的变化，设置网站标题
 watch(
 	() => route.path,
